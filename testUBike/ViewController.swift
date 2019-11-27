@@ -12,6 +12,12 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let viewModels = ListViewModel()
+        viewModels.fetchData()
+        viewModels.refreshViewClosure = {
+            debugPrint(viewModels.infos?.first)
+        }
         // Do any additional setup after loading the view.
     }
 

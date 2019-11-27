@@ -15,6 +15,8 @@
 		5C2E01D5238E8BC60063B3B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C2E01D3238E8BC60063B3B1 /* LaunchScreen.storyboard */; };
 		5C2E01E0238E8BC60063B3B1 /* testUBikeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E01DF238E8BC60063B3B1 /* testUBikeTests.swift */; };
 		5C2E01EB238E8BC60063B3B1 /* testUBikeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E01EA238E8BC60063B3B1 /* testUBikeUITests.swift */; };
+		5C2E01F9238E8E8B0063B3B1 /* ApiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E01F8238E8E8B0063B3B1 /* ApiHelper.swift */; };
+		5C2E01FC238E94E20063B3B1 /* bike.json in Resources */ = {isa = PBXBuildFile; fileRef = 5C2E01FB238E94E20063B3B1 /* bike.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		5C2E01E6238E8BC60063B3B1 /* testUBikeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = testUBikeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C2E01EA238E8BC60063B3B1 /* testUBikeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testUBikeUITests.swift; sourceTree = "<group>"; };
 		5C2E01EC238E8BC60063B3B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5C2E01F8238E8E8B0063B3B1 /* ApiHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiHelper.swift; sourceTree = "<group>"; };
+		5C2E01FB238E94E20063B3B1 /* bike.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = bike.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +103,7 @@
 		5C2E01C7238E8BC40063B3B1 /* testUBike */ = {
 			isa = PBXGroup;
 			children = (
+				5C2E01FA238E94BF0063B3B1 /* MockData */,
 				5C2E01C8238E8BC40063B3B1 /* AppDelegate.swift */,
 				5C2E01CA238E8BC40063B3B1 /* SceneDelegate.swift */,
 				5C2E01CC238E8BC40063B3B1 /* ViewController.swift */,
@@ -106,6 +111,7 @@
 				5C2E01D1238E8BC60063B3B1 /* Assets.xcassets */,
 				5C2E01D3238E8BC60063B3B1 /* LaunchScreen.storyboard */,
 				5C2E01D6238E8BC60063B3B1 /* Info.plist */,
+				5C2E01F8238E8E8B0063B3B1 /* ApiHelper.swift */,
 			);
 			path = testUBike;
 			sourceTree = "<group>";
@@ -126,6 +132,14 @@
 				5C2E01EC238E8BC60063B3B1 /* Info.plist */,
 			);
 			path = testUBikeUITests;
+			sourceTree = "<group>";
+		};
+		5C2E01FA238E94BF0063B3B1 /* MockData */ = {
+			isa = PBXGroup;
+			children = (
+				5C2E01FB238E94E20063B3B1 /* bike.json */,
+			);
+			path = MockData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,6 +246,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C2E01FC238E94E20063B3B1 /* bike.json in Resources */,
 				5C2E01D5238E8BC60063B3B1 /* LaunchScreen.storyboard in Resources */,
 				5C2E01D2238E8BC60063B3B1 /* Assets.xcassets in Resources */,
 				5C2E01D0238E8BC40063B3B1 /* Main.storyboard in Resources */,
@@ -259,6 +274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C2E01F9238E8E8B0063B3B1 /* ApiHelper.swift in Sources */,
 				5C2E01CD238E8BC40063B3B1 /* ViewController.swift in Sources */,
 				5C2E01C9238E8BC40063B3B1 /* AppDelegate.swift in Sources */,
 				5C2E01CB238E8BC40063B3B1 /* SceneDelegate.swift in Sources */,
