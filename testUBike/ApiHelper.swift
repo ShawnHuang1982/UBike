@@ -12,7 +12,7 @@ import Foundation
 ///ref: http://www-ws.gov.taipei/001/Upload/public/mmo/dot/YouBike_JSON檔案說明(修正版)_局網.pdf
     
 struct UBikeStatusDataModel: Decodable {
-    var retVal: [String : Detail]
+    var retVal: [String : StationDetail]
 }
 
 enum DecodingError: Error {
@@ -20,7 +20,7 @@ enum DecodingError: Error {
     case unrecognizedParamValue(String)
 }
 
-struct Detail: Decodable {
+struct StationDetail: Decodable {
     ///站點代號
     var sno: String //"0001"
     ///場站名稱(中文)
@@ -66,7 +66,7 @@ struct UBikeRentInfoViewModel {
     var aren: String //The S.W. side of Road Zhongxiao East Road & Road Chung Yan.
     var dateTime: Date
 
-    init(model: Detail) {
+    init(model: StationDetail) {
         self.sareaen = model.sareaen
         self.sna = model.sna
         self.tot = model.tot
@@ -101,7 +101,6 @@ class ListViewModel {
                 })
             case .failure(let error):
                 debugPrint(error.localizedDescription)
-            default: break
             }
         }
     }

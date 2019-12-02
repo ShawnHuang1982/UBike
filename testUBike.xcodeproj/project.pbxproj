@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C28605823954685008A7EC1 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C28605723954685008A7EC1 /* Coordinator.swift */; };
+		5C28605A23955D40008A7EC1 /* AllStationListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C28605923955D40008A7EC1 /* AllStationListCoordinator.swift */; };
+		5C28605C239561C1008A7EC1 /* StationListPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C28605B239561C1008A7EC1 /* StationListPageViewController.swift */; };
+		5C28605E23956333008A7EC1 /* StationInMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C28605D23956333008A7EC1 /* StationInMapCoordinator.swift */; };
 		5C2E01C9238E8BC40063B3B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E01C8238E8BC40063B3B1 /* AppDelegate.swift */; };
 		5C2E01CB238E8BC40063B3B1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E01CA238E8BC40063B3B1 /* SceneDelegate.swift */; };
 		5C2E01CD238E8BC40063B3B1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E01CC238E8BC40063B3B1 /* ViewController.swift */; };
@@ -17,6 +21,9 @@
 		5C2E01EB238E8BC60063B3B1 /* testUBikeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E01EA238E8BC60063B3B1 /* testUBikeUITests.swift */; };
 		5C2E01F9238E8E8B0063B3B1 /* ApiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2E01F8238E8E8B0063B3B1 /* ApiHelper.swift */; };
 		5C2E01FC238E94E20063B3B1 /* bike.json in Resources */ = {isa = PBXBuildFile; fileRef = 5C2E01FB238E94E20063B3B1 /* bike.json */; };
+		5C4BC76F23924C3B00A562DD /* StationInMapPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BC76E23924C3B00A562DD /* StationInMapPageViewController.swift */; };
+		5C4BC77223924C7B00A562DD /* MyFavoriteStationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BC77123924C7B00A562DD /* MyFavoriteStationViewController.swift */; };
+		5C4BC77523924CAE00A562DD /* HomePageContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BC77423924CAE00A562DD /* HomePageContainerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +44,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C28605723954685008A7EC1 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		5C28605923955D40008A7EC1 /* AllStationListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllStationListCoordinator.swift; sourceTree = "<group>"; };
+		5C28605B239561C1008A7EC1 /* StationListPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationListPageViewController.swift; sourceTree = "<group>"; };
+		5C28605D23956333008A7EC1 /* StationInMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationInMapCoordinator.swift; sourceTree = "<group>"; };
 		5C2E01C5238E8BC40063B3B1 /* testUBike.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testUBike.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C2E01C8238E8BC40063B3B1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5C2E01CA238E8BC40063B3B1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -53,6 +64,9 @@
 		5C2E01EC238E8BC60063B3B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C2E01F8238E8E8B0063B3B1 /* ApiHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiHelper.swift; sourceTree = "<group>"; };
 		5C2E01FB238E94E20063B3B1 /* bike.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = bike.json; sourceTree = "<group>"; };
+		5C4BC76E23924C3B00A562DD /* StationInMapPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationInMapPageViewController.swift; sourceTree = "<group>"; };
+		5C4BC77123924C7B00A562DD /* MyFavoriteStationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFavoriteStationViewController.swift; sourceTree = "<group>"; };
+		5C4BC77423924CAE00A562DD /* HomePageContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageContainerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +117,10 @@
 		5C2E01C7238E8BC40063B3B1 /* testUBike */ = {
 			isa = PBXGroup;
 			children = (
+				5C4BC77323924C9100A562DD /* HomePage */,
+				5C4BC77023924C5F00A562DD /* FavoritePage */,
+				5C4BC76D23924C2200A562DD /* MapPage */,
+				5C4BC76A23924BF100A562DD /* ListPage */,
 				5C2E01FA238E94BF0063B3B1 /* MockData */,
 				5C2E01C8238E8BC40063B3B1 /* AppDelegate.swift */,
 				5C2E01CA238E8BC40063B3B1 /* SceneDelegate.swift */,
@@ -112,6 +130,9 @@
 				5C2E01D3238E8BC60063B3B1 /* LaunchScreen.storyboard */,
 				5C2E01D6238E8BC60063B3B1 /* Info.plist */,
 				5C2E01F8238E8E8B0063B3B1 /* ApiHelper.swift */,
+				5C28605723954685008A7EC1 /* Coordinator.swift */,
+				5C28605923955D40008A7EC1 /* AllStationListCoordinator.swift */,
+				5C28605D23956333008A7EC1 /* StationInMapCoordinator.swift */,
 			);
 			path = testUBike;
 			sourceTree = "<group>";
@@ -140,6 +161,38 @@
 				5C2E01FB238E94E20063B3B1 /* bike.json */,
 			);
 			path = MockData;
+			sourceTree = "<group>";
+		};
+		5C4BC76A23924BF100A562DD /* ListPage */ = {
+			isa = PBXGroup;
+			children = (
+				5C28605B239561C1008A7EC1 /* StationListPageViewController.swift */,
+			);
+			path = ListPage;
+			sourceTree = "<group>";
+		};
+		5C4BC76D23924C2200A562DD /* MapPage */ = {
+			isa = PBXGroup;
+			children = (
+				5C4BC76E23924C3B00A562DD /* StationInMapPageViewController.swift */,
+			);
+			path = MapPage;
+			sourceTree = "<group>";
+		};
+		5C4BC77023924C5F00A562DD /* FavoritePage */ = {
+			isa = PBXGroup;
+			children = (
+				5C4BC77123924C7B00A562DD /* MyFavoriteStationViewController.swift */,
+			);
+			path = FavoritePage;
+			sourceTree = "<group>";
+		};
+		5C4BC77323924C9100A562DD /* HomePage */ = {
+			isa = PBXGroup;
+			children = (
+				5C4BC77423924CAE00A562DD /* HomePageContainerViewController.swift */,
+			);
+			path = HomePage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,10 +327,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C4BC77523924CAE00A562DD /* HomePageContainerViewController.swift in Sources */,
+				5C28605E23956333008A7EC1 /* StationInMapCoordinator.swift in Sources */,
+				5C28605A23955D40008A7EC1 /* AllStationListCoordinator.swift in Sources */,
 				5C2E01F9238E8E8B0063B3B1 /* ApiHelper.swift in Sources */,
+				5C28605C239561C1008A7EC1 /* StationListPageViewController.swift in Sources */,
 				5C2E01CD238E8BC40063B3B1 /* ViewController.swift in Sources */,
 				5C2E01C9238E8BC40063B3B1 /* AppDelegate.swift in Sources */,
 				5C2E01CB238E8BC40063B3B1 /* SceneDelegate.swift in Sources */,
+				5C4BC76F23924C3B00A562DD /* StationInMapPageViewController.swift in Sources */,
+				5C4BC77223924C7B00A562DD /* MyFavoriteStationViewController.swift in Sources */,
+				5C28605823954685008A7EC1 /* Coordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,7 +442,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -436,7 +496,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -451,6 +511,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 66M4KB96AX;
 				INFOPLIST_FILE = testUBike/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -468,6 +529,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 66M4KB96AX;
 				INFOPLIST_FILE = testUBike/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
