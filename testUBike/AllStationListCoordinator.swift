@@ -27,6 +27,10 @@ class AllStationListCoordinator: Coordinator {
         self.stationStorage = stationStorage
     }
     
+    deinit {
+        debugPrint("AllStationListCoordinator deinit")
+    }
+    
     func start() {
         let stationListPageViewController = StationListPageViewController(nibName: nil, bundle: Bundle.main)
         stationListPageViewController.title = "Station List 1"

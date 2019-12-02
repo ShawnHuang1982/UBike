@@ -12,6 +12,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var applicationCoordinator: ApplicationCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -22,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.windowScene = windowsScene
         let applicationCoordinator = ApplicationCoordinator(window: window)
         self.window = window
-        //self.applicationCoordinator = applicationCoordinator
+        self.applicationCoordinator = applicationCoordinator
         applicationCoordinator.start()
     }
 
