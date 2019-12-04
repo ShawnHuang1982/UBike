@@ -21,10 +21,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowsScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.windowScene = windowsScene
-        let applicationCoordinator = ApplicationCoordinator(window: window)
+        //let applicationCoordinator = ApplicationCoordinator(window: window)
         self.window = window
-        self.applicationCoordinator = applicationCoordinator
-        applicationCoordinator.start()
+        //self.applicationCoordinator = applicationCoordinator
+        //applicationCoordinator.start()
+        let rootViewController = UINavigationController()
+        rootViewController.navigationBar.prefersLargeTitles = false
+        rootViewController.navigationBar.isHidden = true
+        rootViewController.addChild(FlowController())
+        self.window?.rootViewController = rootViewController
+        self.window?.makeKeyAndVisible()
+
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

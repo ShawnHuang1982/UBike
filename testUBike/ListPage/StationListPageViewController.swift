@@ -13,8 +13,6 @@ protocol StationListPageViewControllerDelegate: class {
 }
 
 class StationListPageViewController: UIViewController {
-
-    let listViewModels = ListViewModel()
     
     var viewModels: [UBikeRentInfoViewModel]?{
         didSet{
@@ -42,14 +40,6 @@ class StationListPageViewController: UIViewController {
         super.viewDidLoad()
 
         setTableView()
-        
-        listViewModels.fetchData()
-        listViewModels.refreshViewClosure = {
-            [unowned self, unowned listViewModels] in
-            //debugPrint(viewModels.infos?.first)
-            self.viewModels = listViewModels.infos
-        }
-        
         self.view.backgroundColor = UIColor.blue
         // Do any additional setup after loading the view.
     }
