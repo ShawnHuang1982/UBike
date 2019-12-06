@@ -10,14 +10,15 @@ import UIKit
 
 class FlowController: UIViewController {
 
-    let listViewModels = ListViewModel()
-    var viewModels: [UBikeRentInfoViewModel]?    
-    
-    var listVC: StationListPageViewController!
-    var myFavoriteVC: MyFavoriteStationViewController!
-    
-    var tabBarView: TabBarView!
     var collectionView: UICollectionView!
+    let listViewModels = ListViewModel()
+    var viewModels: [UBikeRentInfoViewModel]?
+
+    var tabBarView: TabBarView!
+    lazy var listVC: StationListPageViewController = StationListPageViewController()
+    lazy var mapVC: StationInMapPageViewController = StationInMapPageViewController()
+    lazy var myFavoriteVC: MyFavoriteStationViewController = MyFavoriteStationViewController()
+    
     var viewcontrollers: [UIViewController] = []
     var views: [UIView] = []
     
@@ -64,13 +65,20 @@ class FlowController: UIViewController {
     private func initView(){
         
         //tabarView
-        tabBarView = TabBarView(titles:  ["列表", "我的最愛"])
+        let tabBarNames = ["列表", "地圖", "我的最愛"]
+        var tabBarViewModels: [TabBarViewModel] = []
+        for name in tabBarNames{
+            let font = UIFont(name: "PingFangTC-Medium", size: 30) ?? UIFont.systemFont(ofSize: 30)
+            let viewModel = TabBarViewModel(font: font, title: name, color: .white)
+            tabBarViewModels.append(viewModel)
+        }
+        tabBarView = TabBarView(frame: .zero, viewModels: tabBarViewModels)
         self.view.addSubview(tabBarView)
         tabBarView.translatesAutoresizingMaskIntoConstraints = false
         self.tabBarView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         self.tabBarView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         self.tabBarView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        self.tabBarView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        self.tabBarView.heightAnchor.constraint(equalToConstant: 120).isActive = true
         
         //layout
         let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -93,10 +101,8 @@ class FlowController: UIViewController {
         //self.collectionView.alwaysBounceVertical = false
         self.collectionView.isPagingEnabled = true
         self.collectionView.backgroundColor = .systemPink
-        self.listVC =  StationListPageViewController()
-        self.myFavoriteVC = MyFavoriteStationViewController()
 
-        viewcontrollers = [listVC, myFavoriteVC]
+        viewcontrollers = [listVC, myFavoriteVC, mapVC]
         for vc in viewcontrollers{
             self.addChild(vc)
             vc.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height-80)
@@ -136,7 +142,6 @@ extension FlowController: UICollectionViewDataSource, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
         cell.contentView.addSubview(self.views[indexPath.row])
-        viewcontrollers[indexPath.row].didMove(toParent: self)
         cell.contentView.backgroundColor = .gray
         return cell
     }
@@ -145,11 +150,31 @@ extension FlowController: UICollectionViewDataSource, UICollectionViewDelegate, 
         return CGSize(width: self.collectionView.bounds.width, height: self.collectionView.bounds.height)
     }
     
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) //.zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let scrollIndex = scrollView.contentOffset.x / self.view.bounds.width
         debugPrint(scrollIndex)
         NotificationCenter.default.post(name: Notification.Name(rawValue: "scrollMenu"), object: nil, userInfo: ["length": scrollIndex])
     }
+    
+    
     
 }
 

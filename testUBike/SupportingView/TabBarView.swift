@@ -8,20 +8,25 @@
 
 import UIKit
 
+struct TabBarViewModel {
+    var font: UIFont
+    var title: String
+    var color: UIColor
+}
+
 class TabBarView: UIView {
     
     var collectionView: UICollectionView!
     var indicatorView: UIView!
-    var indicatorLeadingConstraint: NSLayoutConstraint!
-    var indicatorWidth: NSLayoutConstraint!
-    var tabBarTitlesName: [String] = []
+    var indicatorCenterConstraint: NSLayoutConstraint!
+    var indicatorWidthConstraint: NSLayoutConstraint!
+    var viewModels: [TabBarViewModel] = []
     
     var selectedIndex = 0
     
     //MARK: View LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.initView()
     }
     
     required init?(coder: NSCoder) {
@@ -29,10 +34,10 @@ class TabBarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(titles: [String]){
-        self.init()
-        self.tabBarTitlesName = titles
-        self.collectionView.reloadData()
+    convenience init(frame: CGRect, viewModels: [TabBarViewModel]){
+        self.init(frame: frame)
+        self.viewModels = viewModels
+        self.initView()
     }
     
     deinit {
@@ -49,6 +54,9 @@ extension TabBarView{
         //layout
         let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        layout.minimumInteritemSpacing = 0
         
         //collectionView
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -66,13 +74,13 @@ extension TabBarView{
         self.collectionView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         self.collectionView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
-    
         self.backgroundColor = UIColor.blue
 
-
-        NotificationCenter.default.addObserver(self, selector: #selector(self.animateMenu(notification:)), name: Notification.Name.init(rawValue: "scrollMenu"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.animateMenu(notification:)), name: Notification.Name(rawValue: "scrollMenu"), object: nil)
         
+        //indicatorView
         indicatorView = UIView()
+        indicatorView.backgroundColor = .white
         self.addSubview(indicatorView)
     }
     
@@ -91,28 +99,26 @@ extension TabBarView{
 extension TabBarView: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return tabBarTitlesName.count
+        return viewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! TabBarCellCollectionViewCell
-        cell.titleLabel.text = tabBarTitlesName[indexPath.row]
+        setCell(viewModel: viewModels[indexPath.row], cell: cell)
         return cell
     }
     
-    private func setCell(title: String?, cell: TabBarCellCollectionViewCell){
+    private func setCell(viewModel: TabBarViewModel, cell: TabBarCellCollectionViewCell){
+        cell.viewModel = viewModel
         //indicatorView.translatesAutoresizingMaskIntoConstraints = false
-        //cell.titleLabel.centerXAnchor.constraint(equalTo: self.indicatorView.centerXAnchor).isActive = true
-        //self.indicatorView.widthAnchor.constraint(equalToConstant: cell.titleLabel.frame.width + 10).isActive = true
-        
+        //indicatorCenterConstraint = self.indicatorView.centerXAnchor.constraint(equalTo: cell.titleLabel.centerXAnchor)
+        //indicatorWidthConstraint = self.indicatorView.widthAnchor.constraint(equalToConstant: cell.titleLabel.frame.width + 10)
+        //indicatorCenterConstraint.isActive = true
+        //indicatorWidthConstraint.isActive = true
         //let cellHeight: CGFloat = cell.titleLabel.frame.height + 5
+        //self.indicatorView.centerYAnchor.constraint(equalTo: cell.titleLabel.centerYAnchor).isActive = true
         //self.indicatorView.heightAnchor.constraint(equalToConstant: cellHeight).isActive = true
-        
-        //self.indicatorView.layer.cornerRadius = 10
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 200, height: 30)
+        //self.indicatorView.layer.cornerRadius = cellHeight/2
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -10,27 +10,26 @@ import UIKit
 
 class TabBarCellCollectionViewCell: UICollectionViewCell {
 
-    var titleName: String!
     var titleLabel: UILabel!
+    var viewModel: TabBarViewModel!{
+        didSet{
+            self.titleLabel.text = viewModel.title
+            self.titleLabel.font = viewModel.font
+            self.titleLabel.textColor = viewModel.color
+            self.titleLabel.textAlignment = .center
+        }
+    }
         
     override func awakeFromNib() {
         super.awakeFromNib()
         titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(titleLabel)
-        titleLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        titleLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-
-        titleLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
-
-        titleLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
-        titleLabel.textColor = .white
-        titleLabel.text = titleName
-        titleLabel.font = UIFont(name: "PingFangTC-Medium", size: 30)
-    }
-    
-    override func prepareForReuse() {
-        titleLabel.text = titleName
+        titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
+        
     }
 
 }
