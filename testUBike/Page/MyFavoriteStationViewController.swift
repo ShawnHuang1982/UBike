@@ -1,5 +1,5 @@
 //
-//  HomePageContainerViewController.swift
+//  MyFavoriteStationViewController.swift
 //  testUBike
 //
 //  Created by yu-syue huang on 2019/11/30.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-class HomePageContainerViewController: UIViewController {
+class MyFavoriteStationViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.view.backgroundColor = .red
         // Do any additional setup after loading the view.
     }
     

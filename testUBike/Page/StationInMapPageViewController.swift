@@ -1,5 +1,5 @@
 //
-//  MyFavoriteStationViewController.swift
+//  StationInMapPageViewController.swift
 //  testUBike
 //
 //  Created by yu-syue huang on 2019/11/30.
@@ -8,11 +8,12 @@
 
 import UIKit
 
-class MyFavoriteStationViewController: UIViewController {
+class StationInMapPageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.view.backgroundColor = .green
         // Do any additional setup after loading the view.
     }
     

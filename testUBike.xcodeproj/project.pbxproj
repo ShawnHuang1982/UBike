@@ -23,8 +23,10 @@
 		5C2E01FC238E94E20063B3B1 /* bike.json in Resources */ = {isa = PBXBuildFile; fileRef = 5C2E01FB238E94E20063B3B1 /* bike.json */; };
 		5C4BC76F23924C3B00A562DD /* StationInMapPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BC76E23924C3B00A562DD /* StationInMapPageViewController.swift */; };
 		5C4BC77223924C7B00A562DD /* MyFavoriteStationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BC77123924C7B00A562DD /* MyFavoriteStationViewController.swift */; };
-		5C4BC77523924CAE00A562DD /* HomePageContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BC77423924CAE00A562DD /* HomePageContainerViewController.swift */; };
+		5C775FAD2398C62F00A2CF2A /* TabBarCellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C775FAB2398C62F00A2CF2A /* TabBarCellCollectionViewCell.swift */; };
+		5C775FAE2398C62F00A2CF2A /* TabBarCellCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C775FAC2398C62F00A2CF2A /* TabBarCellCollectionViewCell.xib */; };
 		5CC5120723987CAA002A6C68 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5120623987CAA002A6C68 /* TabBarView.swift */; };
+		5CC5120B23987FB0002A6C68 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5120A23987FB0002A6C68 /* Extensions.swift */; };
 		5CE5BD8D239775460066C05B /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE5BD8C239775460066C05B /* FlowController.swift */; };
 /* End PBXBuildFile section */
 
@@ -68,8 +70,10 @@
 		5C2E01FB238E94E20063B3B1 /* bike.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = bike.json; sourceTree = "<group>"; };
 		5C4BC76E23924C3B00A562DD /* StationInMapPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationInMapPageViewController.swift; sourceTree = "<group>"; };
 		5C4BC77123924C7B00A562DD /* MyFavoriteStationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFavoriteStationViewController.swift; sourceTree = "<group>"; };
-		5C4BC77423924CAE00A562DD /* HomePageContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageContainerViewController.swift; sourceTree = "<group>"; };
+		5C775FAB2398C62F00A2CF2A /* TabBarCellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCellCollectionViewCell.swift; sourceTree = "<group>"; };
+		5C775FAC2398C62F00A2CF2A /* TabBarCellCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarCellCollectionViewCell.xib; sourceTree = "<group>"; };
 		5CC5120623987CAA002A6C68 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		5CC5120A23987FB0002A6C68 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5CE5BD8C239775460066C05B /* FlowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,12 +125,10 @@
 		5C2E01C7238E8BC40063B3B1 /* testUBike */ = {
 			isa = PBXGroup;
 			children = (
+				5CC5120923987F9C002A6C68 /* Utilities */,
 				5CC5120823987CB6002A6C68 /* Navigation */,
 				5CC5120523987C85002A6C68 /* SupportingView */,
-				5C4BC77323924C9100A562DD /* HomePage */,
-				5C4BC77023924C5F00A562DD /* FavoritePage */,
-				5C4BC76D23924C2200A562DD /* MapPage */,
-				5C4BC76A23924BF100A562DD /* ListPage */,
+				5C4BC76A23924BF100A562DD /* Page */,
 				5C2E01FA238E94BF0063B3B1 /* MockData */,
 				5C2E01C8238E8BC40063B3B1 /* AppDelegate.swift */,
 				5C2E01CA238E8BC40063B3B1 /* SceneDelegate.swift */,
@@ -166,42 +168,22 @@
 			path = MockData;
 			sourceTree = "<group>";
 		};
-		5C4BC76A23924BF100A562DD /* ListPage */ = {
-			isa = PBXGroup;
-			children = (
-				5C28605B239561C1008A7EC1 /* StationListPageViewController.swift */,
-			);
-			path = ListPage;
-			sourceTree = "<group>";
-		};
-		5C4BC76D23924C2200A562DD /* MapPage */ = {
-			isa = PBXGroup;
-			children = (
-				5C4BC76E23924C3B00A562DD /* StationInMapPageViewController.swift */,
-			);
-			path = MapPage;
-			sourceTree = "<group>";
-		};
-		5C4BC77023924C5F00A562DD /* FavoritePage */ = {
+		5C4BC76A23924BF100A562DD /* Page */ = {
 			isa = PBXGroup;
 			children = (
 				5C4BC77123924C7B00A562DD /* MyFavoriteStationViewController.swift */,
+				5C4BC76E23924C3B00A562DD /* StationInMapPageViewController.swift */,
+				5C28605B239561C1008A7EC1 /* StationListPageViewController.swift */,
 			);
-			path = FavoritePage;
-			sourceTree = "<group>";
-		};
-		5C4BC77323924C9100A562DD /* HomePage */ = {
-			isa = PBXGroup;
-			children = (
-				5C4BC77423924CAE00A562DD /* HomePageContainerViewController.swift */,
-			);
-			path = HomePage;
+			path = Page;
 			sourceTree = "<group>";
 		};
 		5CC5120523987C85002A6C68 /* SupportingView */ = {
 			isa = PBXGroup;
 			children = (
 				5CC5120623987CAA002A6C68 /* TabBarView.swift */,
+				5C775FAB2398C62F00A2CF2A /* TabBarCellCollectionViewCell.swift */,
+				5C775FAC2398C62F00A2CF2A /* TabBarCellCollectionViewCell.xib */,
 			);
 			path = SupportingView;
 			sourceTree = "<group>";
@@ -215,6 +197,14 @@
 				5CE5BD8C239775460066C05B /* FlowController.swift */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		5CC5120923987F9C002A6C68 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				5CC5120A23987FB0002A6C68 /* Extensions.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,6 +314,7 @@
 				5C2E01FC238E94E20063B3B1 /* bike.json in Resources */,
 				5C2E01D5238E8BC60063B3B1 /* LaunchScreen.storyboard in Resources */,
 				5C2E01D2238E8BC60063B3B1 /* Assets.xcassets in Resources */,
+				5C775FAE2398C62F00A2CF2A /* TabBarCellCollectionViewCell.xib in Resources */,
 				5C2E01D0238E8BC40063B3B1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -349,8 +340,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C4BC77523924CAE00A562DD /* HomePageContainerViewController.swift in Sources */,
 				5C28605E23956333008A7EC1 /* StationInMapCoordinator.swift in Sources */,
+				5C775FAD2398C62F00A2CF2A /* TabBarCellCollectionViewCell.swift in Sources */,
 				5CC5120723987CAA002A6C68 /* TabBarView.swift in Sources */,
 				5C28605A23955D40008A7EC1 /* AllStationListCoordinator.swift in Sources */,
 				5C2E01F9238E8E8B0063B3B1 /* ApiHelper.swift in Sources */,
@@ -362,6 +353,7 @@
 				5C4BC77223924C7B00A562DD /* MyFavoriteStationViewController.swift in Sources */,
 				5C28605823954685008A7EC1 /* Coordinator.swift in Sources */,
 				5CE5BD8D239775460066C05B /* FlowController.swift in Sources */,
+				5CC5120B23987FB0002A6C68 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
