@@ -11,8 +11,7 @@ import UIKit
 class FlowController: UIViewController {
 
     var collectionView: UICollectionView!
-    let listViewModels = ListViewModel()
-    var viewModels: [UBikeRentInfoViewModel]?
+    let flowControlViewModel = FlowControlViewModel()
 
     var tabBarView: TabBarView!
     lazy var listVC: StationListPageViewController = StationListPageViewController()
@@ -21,6 +20,7 @@ class FlowController: UIViewController {
     
     var viewcontrollers: [UIViewController] = []
     var views: [UIView] = []
+    var timer: Timer?
     
     private var stationInMapPageViewController: StationInMapPageViewController?
 
@@ -35,17 +35,7 @@ class FlowController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
-        listViewModels.fetchData()
-        listViewModels.refreshViewClosure = {
-            [unowned self, unowned listViewModels] in
-            //debugPrint(viewModels.infos?.first)
-            self.viewModels = listViewModels.infos
-            DispatchQueue.main.async {
-                self.listVC.viewModels = self.viewModels
-                //self.present(self.listVC, animated: false, completion: nil)
-            }
-        }
-        // Do any additional setup after loading the view.
+        setViewModel()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -56,10 +46,37 @@ class FlowController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         listVC.delegate = self
+        setTimer(isOn: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setTimer(isOn: false)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func setViewModel(){
+        flowControlViewModel.fetchData()
+        flowControlViewModel.refreshViewClosure = {
+            [unowned self, unowned flowControlViewModel] in
+            self.listVC.viewModels = flowControlViewModel.sortedInfos
+            debugPrint("refreshViewClosure")
+        }
+    }
+    
+    private func setTimer(isOn: Bool){
+        if isOn{
+            timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [unowned flowControlViewModel] (timer) in
+                flowControlViewModel.fetchData()
+                debugPrint("fetch data")
+            }
+            timer?.fire()
+        }else{
+            timer?.invalidate()
+        }
     }
     
     private func initView(){
@@ -68,8 +85,7 @@ class FlowController: UIViewController {
         let tabBarNames = ["列表", "地圖", "我的最愛"]
         var tabBarViewModels: [TabBarViewModel] = []
         for name in tabBarNames{
-            let font = UIFont(name: "PingFangTC-Medium", size: 30) ?? UIFont.systemFont(ofSize: 30)
-            let viewModel = TabBarViewModel(font: font, title: name, color: .white)
+            let viewModel = TabBarViewModel(model: TabBarModel(title: name))
             tabBarViewModels.append(viewModel)
         }
         tabBarView = TabBarView(frame: .zero, viewModels: tabBarViewModels)
