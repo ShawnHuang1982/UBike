@@ -8,17 +8,11 @@
 
 import UIKit
 
-struct TabBarViewModel {
-    var font: UIFont
-    var title: String
-    var color: UIColor
-}
-
 class TabBarView: UIView {
     
     var collectionView: UICollectionView!
     var indicatorView: UIView!
-    var indicatorCenterConstraint: NSLayoutConstraint!
+    var indicatorLeadingConstraint: NSLayoutConstraint!
     var indicatorWidthConstraint: NSLayoutConstraint!
     var viewModels: [TabBarViewModel] = []
     
@@ -38,6 +32,13 @@ class TabBarView: UIView {
         self.init(frame: frame)
         self.viewModels = viewModels
         self.initView()
+        
+        ///reference: https://stackoverflow.com/questions/14020027/how-do-i-know-that-the-uicollectionview-has-been-loaded-completely
+        collectionView.collectionViewLayout.invalidateLayout()
+        DispatchQueue.main.async {
+            self.setIndicatorView()
+        }
+        
     }
     
     deinit {
@@ -82,15 +83,19 @@ extension TabBarView{
         indicatorView = UIView()
         indicatorView.backgroundColor = .white
         self.addSubview(indicatorView)
+        
     }
     
     @objc func animateMenu(notification: Notification) {
         if let info = notification.userInfo {
             let userInfo = info as! [String: CGFloat]
-            //self.indicatorLeadingConstraint.constant = self.indicatorView.bounds.width * userInfo["length"]!
             self.selectedIndex = Int(round(userInfo["length"]!))
+            //
+            let cell = collectionView.cellForItem(at: IndexPath(item: selectedIndex, section: 0))
+            let real = collectionView.convert(cell?.frame.origin ?? .zero, to: collectionView.superview)
+            self.indicatorLeadingConstraint.constant = (real.x) //userInfo["length"]! + (real.x)
+            self.indicatorWidthConstraint.constant = cell?.frame.width ?? 50.0
             self.layoutIfNeeded()
-            self.collectionView.reloadData()
         }
     }
 }
@@ -110,15 +115,19 @@ extension TabBarView: UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
     
     private func setCell(viewModel: TabBarViewModel, cell: TabBarCellCollectionViewCell){
         cell.viewModel = viewModel
-        //indicatorView.translatesAutoresizingMaskIntoConstraints = false
-        //indicatorCenterConstraint = self.indicatorView.centerXAnchor.constraint(equalTo: cell.titleLabel.centerXAnchor)
-        //indicatorWidthConstraint = self.indicatorView.widthAnchor.constraint(equalToConstant: cell.titleLabel.frame.width + 10)
-        //indicatorCenterConstraint.isActive = true
-        //indicatorWidthConstraint.isActive = true
-        //let cellHeight: CGFloat = cell.titleLabel.frame.height + 5
-        //self.indicatorView.centerYAnchor.constraint(equalTo: cell.titleLabel.centerYAnchor).isActive = true
-        //self.indicatorView.heightAnchor.constraint(equalToConstant: cellHeight).isActive = true
-        //self.indicatorView.layer.cornerRadius = cellHeight/2
+    }
+    
+    private func setIndicatorView(){
+        indicatorView.translatesAutoresizingMaskIntoConstraints = false
+        let cell = collectionView.cellForItem(at: IndexPath(item: selectedIndex, section: 0))
+        indicatorLeadingConstraint = self.indicatorView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: cell?.frame.origin.x ?? .zero)
+        indicatorWidthConstraint = self.indicatorView.widthAnchor.constraint(equalToConstant: cell?.frame.width ?? 50.0)
+        indicatorLeadingConstraint.isActive = true
+        indicatorWidthConstraint.isActive = true
+        self.indicatorView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
+        self.indicatorView.heightAnchor.constraint(equalToConstant: 4).isActive = true
+        self.indicatorView.layer.cornerRadius = 2
+        self.indicatorView.clipsToBounds = true
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
