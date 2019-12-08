@@ -30,6 +30,10 @@ struct UBikeRentInfoViewModel {
     var mday: String //"20191127192321"
     ///全站禁用狀態/ 場站暫停營運
     var act: String //1
+    ///緯度
+    var lat: String //"25.0408578889"
+    ///經度
+    var lng: String // "121.567904444"
     
     enum SbiStatus{
         case almostEmpty
@@ -75,5 +79,7 @@ struct UBikeRentInfoViewModel {
         self.act = model.act
         self.mday = model.mday
         self.sno = model.sno
+        self.lat = model.lat
+        self.lng = model.lng
     }
 }

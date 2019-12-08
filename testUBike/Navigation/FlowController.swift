@@ -69,7 +69,7 @@ class FlowController: UIViewController {
     
     private func setTimer(isOn: Bool){
         if isOn{
-            timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [unowned flowControlViewModel] (timer) in
+            timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [unowned flowControlViewModel] (timer) in
                 flowControlViewModel.fetchData()
                 debugPrint("fetch data")
             }
@@ -199,16 +199,24 @@ extension FlowController: StationListPageViewControllerDelegate{
         
         let stationInMapPageViewController = StationInMapPageViewController()
         stationInMapPageViewController.title = selectedStation.sareaen
+        stationInMapPageViewController.viewModel = selectedStation
         self.presentVC(vc: stationInMapPageViewController)
         self.stationInMapPageViewController = stationInMapPageViewController
+        
+        //let cardViewController = CardViewController()
+        //cardViewController.viewModel = selectedStation
+        //self.presentVC(vc: cardViewController)
+    
     }
     
     func presentVC(vc: UIViewController){
-        let window = UIApplication.shared.keyWindow!
-        if let modalVC = window.rootViewController?.presentedViewController {
-            modalVC.present(vc, animated: true, completion: nil)
-        } else {
-            window.rootViewController!.present(vc, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            let window = UIApplication.shared.keyWindow!
+            if let modalVC = window.rootViewController?.presentedViewController {
+                modalVC.present(vc, animated: true, completion: nil)
+            } else {
+                window.rootViewController!.present(vc, animated: true, completion: nil)
+            }
         }
     }
     

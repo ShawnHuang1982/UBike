@@ -44,10 +44,12 @@ class StationListPageViewController: UIViewController {
         return segment
     }()
     
+    private var selectedIndexPath: IndexPath?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
-        // Do any additional setup after loading the view.
+        setLongPressPreview()
     }
     
     private func initView(){
@@ -112,4 +114,34 @@ extension StationListPageViewController: UITableViewDataSource, UITableViewDeleg
         return UITableView.automaticDimension
     }
     
+}
+
+
+extension StationListPageViewController: UIViewControllerPreviewingDelegate{
+
+    func setLongPressPreview(){
+        registerForPreviewing(with: self, sourceView: self.view)
+    }
+
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        
+        if let indexPath = tableView.indexPathForRow(at: location), let viewModel = viewModels?[indexPath.row] {
+            selectedIndexPath = indexPath
+            let cardVC = CardViewController()
+            cardVC.viewModel = viewModel
+            cardVC.preferredContentSize = CGSize(width: 0.0, height: 450)
+            return cardVC
+        }
+          
+        return nil
+    }
+
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        
+        guard let row = selectedIndexPath?.row, let viewModel = self.viewModels?[row] else{
+            return
+        }
+        delegate?.stationListPageViewControllerDidSelectStation(viewModel)
+    }
 }
