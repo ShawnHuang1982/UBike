@@ -20,11 +20,26 @@ class StationInMapPageViewController: UIViewController {
         initView()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        presentRelatedInfoCard()
+
+    }
+    
     private func initView(){
         self.view.backgroundColor = .green
         setMapView()
         moveLocation()
     }
+    
+    private func presentRelatedInfoCard(){
+        let vc = CardViewController()
+        vc.isShowCardAsChild = true
+        vc.viewModel = self.viewModel
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    
     
     private func setMapView(){
         self.view.addSubview(mapView)

@@ -203,6 +203,7 @@ extension FlowController: StationListPageViewControllerDelegate{
         self.presentVC(vc: stationInMapPageViewController)
         self.stationInMapPageViewController = stationInMapPageViewController
         
+        //FIXME: only for test
         //let cardViewController = CardViewController()
         //cardViewController.viewModel = selectedStation
         //self.presentVC(vc: cardViewController)
