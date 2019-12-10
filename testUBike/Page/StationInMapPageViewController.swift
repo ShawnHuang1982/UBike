@@ -5,6 +5,7 @@
 //  Created by yu-syue huang on 2019/11/30.
 //  Copyright © 2019 yu-syue huang. All rights reserved.
 //
+/// reference bottomSheetVC from: https://stackoverflow.com/questions/37967555/how-can-i-mimic-the-bottom-sheet-from-the-maps-app
 
 import UIKit
 import MapKit
@@ -14,6 +15,8 @@ class StationInMapPageViewController: UIViewController {
     let mapView: MKMapView! = MKMapView()
     
     var viewModel: UBikeRentInfoViewModel!
+    
+    var bottomSheetVCheight: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +25,7 @@ class StationInMapPageViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        presentRelatedInfoCard()
+        addBottomSheeView()
 
     }
     
@@ -32,11 +35,26 @@ class StationInMapPageViewController: UIViewController {
         moveLocation()
     }
     
-    private func presentRelatedInfoCard(){
-        let vc = CardViewController()
-        vc.isShowCardAsChild = true
-        vc.viewModel = self.viewModel
-        self.present(vc, animated: true, completion: nil)
+    private func addBottomSheeView(){
+        //1
+        let bottomSheetVC = CardViewController()
+        //2
+        bottomSheetVC.viewModel = self.viewModel
+        self.addChild(bottomSheetVC)
+        self.view.addSubview(bottomSheetVC.view)
+        bottomSheetVC.view.translatesAutoresizingMaskIntoConstraints = false
+        bottomSheetVC.didMove(toParent: self)
+        let
+        bottomSheetVCheight = bottomSheetVC.view.heightAnchor.constraint(equalToConstant: 400)
+        //3
+        NSLayoutConstraint.activate([
+            bottomSheetVC.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            bottomSheetVC.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            
+            bottomSheetVC.view.trailingAnchor
+                .constraint(equalTo: self.view.trailingAnchor),
+            bottomSheetVCheight
+        ])
     }
     
     

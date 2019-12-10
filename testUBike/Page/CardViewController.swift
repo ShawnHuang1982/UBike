@@ -15,7 +15,6 @@ class CardViewController: UIViewController {
     var info: [InfomationModel]?
     
     var viewModel: UBikeRentInfoViewModel?
-    var isShowCardAsChild: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,32 +30,10 @@ class CardViewController: UIViewController {
         setInfomationView(viewModel: self.viewModel)
     }
     
-    override func updateViewConstraints() {
-        
-        guard isShowCardAsChild else {
-            super.updateViewConstraints()
-            
-            return
-        }
-        debugPrint("👉updateViewConstraints")
-        
-        // distance to top introduced in iOS 13 for modal controllers
-        // they're now "cards"
-        let TOP_CARD_DISTANCE: CGFloat = 400.0
-        
-        // calculate height of everything inside that stackview
-        var height: CGFloat = 0.0
-        for v in self.stackView.subviews {
-            height = height + v.frame.size.height
-        }
-        
-        // change size of Viewcontroller's view to that height
-        self.view.frame.size.height = height
-        // reposition the view (if not it will be near the top)
-        self.view.frame.origin.y = UIScreen.main.bounds.height - height - TOP_CARD_DISTANCE
-        // apply corner radius only to top corners
-        self.view.roundCorners(corners: [.topLeft, .topRight], radius: 10.0)
-        super.updateViewConstraints()
+    override func viewDidAppear(_ animated: Bool) {
+//        UIView.animate(withDuration: 0.3) {
+//            [weak self] in
+//        }
     }
     
     private func setNavigationToPlaceView(){
