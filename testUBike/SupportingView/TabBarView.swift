@@ -56,9 +56,9 @@ extension TabBarView{
         let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 10, right: 20)
         layout.minimumInteritemSpacing = 0
-        
+
         //collectionView
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -96,6 +96,9 @@ extension TabBarView{
             self.indicatorLeadingConstraint.constant = (real.x) //userInfo["length"]! + (real.x)
             self.indicatorWidthConstraint.constant = cell?.frame.width ?? 50.0
             self.layoutIfNeeded()
+            if floor(userInfo["length"]!) == userInfo["length"]!{
+                collectionView.reloadData()
+            }
         }
     }
 }
@@ -109,12 +112,14 @@ extension TabBarView: UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! TabBarCellCollectionViewCell
-        setCell(viewModel: viewModels[indexPath.row], cell: cell)
+        setCell(viewModel: viewModels[indexPath.row], cell: cell, isSelected: indexPath.row == selectedIndex)
         return cell
     }
     
-    private func setCell(viewModel: TabBarViewModel, cell: TabBarCellCollectionViewCell){
+    private func setCell(viewModel: TabBarViewModel, cell: TabBarCellCollectionViewCell, isSelected: Bool){
         cell.viewModel = viewModel
+        cell.titleLabel.textColor = isSelected ? viewModel.selectedColor : viewModel.color
+        
     }
     
     private func setIndicatorView(){

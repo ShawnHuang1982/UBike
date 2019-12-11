@@ -13,6 +13,11 @@ extension UIColor{
         let color = UIColor.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
         return color
     }
+    
+    class func rgba(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat, _ a: CGFloat) -> UIColor {
+        let color = UIColor.init(red: r/255, green: g/255, blue: b/255, alpha: a)
+        return color
+    }
 }
 
 extension NSLayoutConstraint {

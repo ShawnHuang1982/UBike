@@ -38,7 +38,7 @@ class StationListPageViewController: UIViewController {
     weak var delegate: StationListPageViewControllerDelegate?
     
     lazy var segment: UISegmentedControl = {
-        let segment = UISegmentedControl(items: ["可租借", "空位"])
+        let segment = UISegmentedControl(items: ["借車", "還車"])
         segment.tintColor = UIColor.white
         segment.backgroundColor = UIColor.lightGray
         return segment
@@ -65,11 +65,11 @@ class StationListPageViewController: UIViewController {
     private func setSegment(){
         self.view.addSubview(segment)
         segment.translatesAutoresizingMaskIntoConstraints = false
-        segment.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        segment.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10).isActive = true
-        segment.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        
-        segment.heightAnchor.constraint(equalToConstant: 30).isActive = true
+       
+        segment.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10 ).isActive = true
+        segment.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 17).isActive = true
+        segment.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -17).isActive = true
+        segment.heightAnchor.constraint(equalToConstant: 28).isActive = true
         
         segment.selectedSegmentIndex = 0
         

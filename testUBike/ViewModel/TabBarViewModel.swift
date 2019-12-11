@@ -13,9 +13,10 @@ struct TabBarModel {
 }
 
 struct TabBarViewModel {
-    var font: UIFont = UIFont(name: "PingFangTC-Medium", size: 30) ?? UIFont.systemFont(ofSize: 30)
+    var font: UIFont = UIFont(name: "PingFangTC-Regular", size: 24) ?? UIFont.systemFont(ofSize: 24)
     var title: String
-    var color: UIColor = .white
+    var color: UIColor = UIColor.rgba(77, 77, 77, 1)
+    var selectedColor: UIColor = .white
     
     init(model: TabBarModel) {
         self.title = model.title

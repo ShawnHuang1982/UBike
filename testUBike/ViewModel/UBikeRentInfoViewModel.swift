@@ -35,14 +35,14 @@ struct UBikeRentInfoViewModel {
     ///經度
     var lng: String // "121.567904444"
     
-    enum SbiStatus{
+    enum RentStatus{
         case almostEmpty
         case full
         case careful
         case invalid
     }
     
-    var sbiStatus: SbiStatus?{
+    var sbiStatus: RentStatus?{
         get{
             guard let sbiNumber = Int(sbi), act == "1" else { return .invalid }
             switch sbiNumber {
@@ -56,12 +56,38 @@ struct UBikeRentInfoViewModel {
         }
     }
     
-    var color: (font: UIColor, background: UIColor)?{
+    var sbiColor: (font: UIColor, background: UIColor)?{
         get{
             switch sbiStatus{
-            case .careful: return (font: UIColor.black, background: UIColor.yellow)
-            case .almostEmpty: return (font: UIColor.white, background: UIColor.red)
-            case .full: return (font: UIColor.black, background: UIColor.green)
+            case .careful: return (font: UIColor.rgba(250, 173, 23, 1), background: UIColor.rgba(37, 40, 40, 1))
+            case .almostEmpty: return (font: UIColor.rgba(255, 110, 121, 1), background: UIColor.rgba(37, 40, 40, 1))
+            case .full: return (font: UIColor.rgba(0, 203, 169, 1), background: UIColor.rgba(37, 40, 40, 1))
+            default:
+                return (font: UIColor.darkGray, background: UIColor.lightGray)
+            }
+        }
+    }
+    
+    var bempStatus: RentStatus?{
+        get{
+            guard let bempNumber = Int(bemp), act == "1" else { return .invalid }
+            switch bempNumber {
+            case let x where x == 0:
+                return .almostEmpty
+            case let x where x >= 20:
+                return .full
+            default:
+                return .careful
+            }
+        }
+    }
+    
+    var bempColor: (font: UIColor, background: UIColor)?{
+        get{
+            switch bempStatus{
+            case .careful: return (font: UIColor.rgba(250, 173, 23, 1), background: UIColor.rgba(37, 40, 40, 1))
+            case .almostEmpty: return (font: UIColor.rgba(255, 110, 121, 1), background: UIColor.rgba(37, 40, 40, 1))
+            case .full: return (font: UIColor.rgba(0, 203, 169, 1), background: UIColor.rgba(37, 40, 40, 1))
             default:
                 return (font: UIColor.darkGray, background: UIColor.lightGray)
             }

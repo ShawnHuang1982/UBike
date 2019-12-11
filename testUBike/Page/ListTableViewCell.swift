@@ -24,6 +24,8 @@ class ListTableViewCell: UITableViewCell {
         let label = UILabel()
         label.textAlignment = .left
         label.numberOfLines = 0
+        label.textColor = UIColor.rgba(240, 243, 242, 1)
+        label.font = UIFont(name: "PingFangTC-Medium", size: 17)
         return label
     }()
     
@@ -32,15 +34,18 @@ class ListTableViewCell: UITableViewCell {
         let label = UILabel()
         label.textAlignment = .left
         label.numberOfLines = 0
+        label.textColor = UIColor.rgba(178, 178, 178, 1)
+        label.font = UIFont(name: "PingFangTC-Regular", size: 14)
         return label
     }()
     
-    ///空位數量/可還車位數
-    var bempLabel: UILabel = {
+    /// eg. "信義區"
+    var sareaLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.numberOfLines = 1
-        label.font = UIFont(name: "PingFangTC-Medium", size: 30) ?? UIFont.systemFont(ofSize: 30)
+        label.numberOfLines = 0
+        label.textColor = UIColor.rgba(77, 77, 77, 1)
+        label.font = UIFont(name: "PingFangTC-Regular", size: 14)
         return label
     }()
     
@@ -49,8 +54,7 @@ class ListTableViewCell: UITableViewCell {
         let label = UILabel()
         label.textAlignment = .center
         label.numberOfLines = 1
-        label.font = UIFont(name: "PingFangTC-Medium", size: 30) ?? UIFont.systemFont(ofSize: 30)
-        label.textColor = .white
+        label.font = UIFont(name: "PingFangTC-Medium", size: 24)
         return label
     }()
     
@@ -77,19 +81,26 @@ class ListTableViewCell: UITableViewCell {
     
     func combineViewModel(){
         self.backgroundColor = .clear
-        setLabel(stationLabel, text: viewModel?.sna, fontColor: viewModel?.color?.font)
-        setLabel(addressLabel, text: viewModel?.ar, fontColor: viewModel?.color?.font)
-        setLabel(bempLabel, text: viewModel?.bemp, fontColor: viewModel?.color?.font)
+        setLabel(stationLabel, text: viewModel?.sna)
+        setLabel(addressLabel, text: viewModel?.ar)
+        setLabel(sareaLabel, text: viewModel?.sareaen)
         let number = displayNumberMode == .sbi ? viewModel?.sbi : viewModel?.bemp
-        setLabel(numberLabel, text: number, fontColor: viewModel?.color?.font)
-        containerView.backgroundColor = viewModel?.color?.background
+        let color = displayNumberMode == .sbi ? viewModel?.sbiColor : viewModel?.bempColor
+        setLabel(numberLabel, text: number, fontColor: color?.font)
+        containerView.backgroundColor = color?.background
         
     }
     
-    private func setLabel(_ label:UILabel?, text:String?, fontColor: UIColor?){
+    private func setLabel(_ label:UILabel?, text:String?, fontColor: UIColor? = nil){
         UIView.animate(withDuration: 1) {
             label?.text = text
             label?.textColor = fontColor
+        }
+    }
+    
+    private func setLabel(_ label:UILabel?, text:String?){
+        UIView.animate(withDuration: 1) {
+            label?.text = text
         }
     }
     
@@ -97,31 +108,56 @@ class ListTableViewCell: UITableViewCell {
         setContainerView()
         setStationLabel()
         setAddressLabel()
-        setNumberLabel()
+        setSareaLabel()
+        setNumberLabel(displayNumberMode: self.displayNumberMode ?? .sbi)
     }
     
     private func setContainerView(){
         self.contentView.addSubview(containerView)
         containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive = true
-        containerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10).isActive = true
+        containerView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 17).isActive = true
+        containerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -17).isActive = true
 
         containerView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive = true
 
         containerView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10).isActive = true
 
-        containerView.backgroundColor = .lightGray
+        containerView.backgroundColor = UIColor.rgba(36, 40, 40, 1)
         containerView.layer.cornerRadius = 10
         
     }
     
     private func setStationLabel(){
+        
         self.containerView.addSubview(stationLabel)
         stationLabel.translatesAutoresizingMaskIntoConstraints = false
-        let _ = NSLayoutConstraint.init(item:self.stationLabel , attribute: .top, relatedBy: .equal, toItem: self.containerView, attribute: .top, multiplier: 1.0, constant: 10).isActive = true
-        let _ = NSLayoutConstraint.init(item: self.stationLabel, attribute: .leading, relatedBy: .equal, toItem: self.containerView , attribute: .leading, multiplier: 1.0, constant: 10).isActive = true
-        let _ = NSLayoutConstraint.init(item: self, attribute: .trailing, relatedBy: .equal, toItem: self.stationLabel, attribute: .trailing, multiplier: 1.0, constant: 0).isActive = true
-        stationLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        let _ = NSLayoutConstraint.init(item:self.stationLabel , attribute: .top, relatedBy: .equal, toItem: self.containerView, attribute: .top, multiplier: 1.0, constant: 12).isActive = true
+        let _ = NSLayoutConstraint.init(item: self.stationLabel, attribute: .leading, relatedBy: .equal, toItem: self.containerView , attribute: .leading, multiplier: 1.0, constant: 16).isActive = true
+        stationLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        
+        let lineView = UIView()
+        lineView.backgroundColor = UIColor.rgba(23, 28, 27, 1)
+        self.containerView.addSubview(lineView)
+        lineView.translatesAutoresizingMaskIntoConstraints = false
+        let _ = NSLayoutConstraint.init(item: lineView, attribute: .top, relatedBy: .equal, toItem: self.containerView, attribute: .top, multiplier: 1.0, constant: 0).isActive = true
+        let _ = NSLayoutConstraint.init(item: lineView, attribute: .bottom, relatedBy: .equal, toItem: self.containerView, attribute: .bottom, multiplier: 1.0, constant: 0).isActive = true
+        let _ = NSLayoutConstraint.init(item: lineView, attribute: .leading, relatedBy: .equal, toItem: stationLabel, attribute: .trailing, multiplier: 1.0, constant: 10).isActive = true
+        lineView.widthAnchor.constraint(equalToConstant: 2).isActive = true
+        
+        let supportTextLabel = UILabel()
+        supportTextLabel.text = displayNumberMode == .sbi ? "可借" : "可還"
+        supportTextLabel.textColor = UIColor.rgba(152, 152, 152, 1)
+        supportTextLabel.font = UIFont(name: "PingFangTC-Regular", size: 14)
+        supportTextLabel.textAlignment = .right
+        self.containerView.addSubview(supportTextLabel)
+        supportTextLabel.translatesAutoresizingMaskIntoConstraints = false
+        let _ = NSLayoutConstraint.init(item: supportTextLabel, attribute: .top, relatedBy: .equal, toItem: self.containerView, attribute: .top, multiplier: 1.0, constant: 10).isActive = true
+        let _ = NSLayoutConstraint.init(item: supportTextLabel, attribute: .leading, relatedBy: .equal, toItem: lineView, attribute: .trailing, multiplier: 1.0, constant: 10).isActive = true
+        let _ = NSLayoutConstraint.init(item: supportTextLabel, attribute: .trailing, relatedBy: .equal, toItem: self.containerView, attribute: .trailing, multiplier: 1.0, constant: -10).isActive = true
+        supportTextLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 70).isActive = true
+        supportTextLabel.heightAnchor.constraint(equalToConstant: 29).isActive = true
+
+        
     }
     
     private func setAddressLabel(){
@@ -129,25 +165,43 @@ class ListTableViewCell: UITableViewCell {
         addressLabel.translatesAutoresizingMaskIntoConstraints = false
         let _ = NSLayoutConstraint.init(item: self.stationLabel, attribute: .bottom, relatedBy: .equal, toItem: self.addressLabel, attribute: .top, multiplier: 1.0, constant: 0).isActive = true
         
-        let _ = NSLayoutConstraint.init(item: self.addressLabel, attribute: .bottom, relatedBy: .equal, toItem: self.containerView, attribute: .bottom, multiplier: 1.0, constant: 0).isActive = true
-        
-        let _ = NSLayoutConstraint.init(item: self.addressLabel, attribute: .leading, relatedBy: .equal, toItem: self.containerView, attribute: .leading, multiplier: 1.0, constant: 10).isActive = true
-        addressLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
+        let _ = NSLayoutConstraint.init(item: self.addressLabel, attribute: .leading, relatedBy: .equal, toItem: self.stationLabel, attribute: .leading, multiplier: 1.0, constant: 0).isActive = true
+        addressLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 24).isActive = true
     }
     
-    private func setNumberLabel(){
+    private func setSareaLabel(){
+        self.containerView.addSubview(sareaLabel)
+        sareaLabel.translatesAutoresizingMaskIntoConstraints = false
+        let _ = NSLayoutConstraint.init(item: self.addressLabel, attribute: .bottom, relatedBy: .equal, toItem: self.sareaLabel, attribute: .top, multiplier: 1.0, constant: 0).isActive = true
+        
+        let _ = NSLayoutConstraint.init(item: self.sareaLabel, attribute: .bottom, relatedBy: .equal, toItem: self.containerView, attribute: .bottom, multiplier: 1.0, constant: 0).isActive = true
+        
+        let _ = NSLayoutConstraint.init(item: self.sareaLabel, attribute: .leading, relatedBy: .equal, toItem: self.stationLabel, attribute: .leading, multiplier: 1.0, constant: 0).isActive = true
+        
+        sareaLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
+    }
+    
+    private func setNumberLabel(displayNumberMode: DisplayMode){
+
+        let label1 = UILabel()
+        label1.text = "輛"
+        label1.textColor = UIColor.rgba(152, 152, 152, 1)
+        label1.font = UIFont(name: "PingFangTC-Regular", size: 14)
+        self.containerView.addSubview(label1)
+        label1.translatesAutoresizingMaskIntoConstraints = false
+        let _ = NSLayoutConstraint.init(item: label1, attribute: .trailing, relatedBy: .equal, toItem: self.containerView, attribute: .trailing, multiplier: 1.0, constant: 0).isActive = true
+        let _ = NSLayoutConstraint.init(item: label1, attribute: .bottom, relatedBy: .equal, toItem: self.containerView, attribute: .bottom, multiplier: 1.0, constant: -9).isActive = true
+        label1.widthAnchor.constraint(equalToConstant: 29).isActive = true
+        label1.heightAnchor.constraint(equalToConstant: 29).isActive = true
+        
         self.containerView.addSubview(numberLabel)
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
+        let _ = NSLayoutConstraint.init(item: self.numberLabel, attribute: .trailing, relatedBy: .equal, toItem: label1, attribute: .leading, multiplier: 1.0, constant: -5).isActive = true
         
-        let _ = NSLayoutConstraint.init(item: self.numberLabel, attribute: .top, relatedBy: .equal, toItem: self.containerView, attribute: .top, multiplier: 1.0, constant: 10).isActive = true
-        
-        let _ = NSLayoutConstraint.init(item: self.numberLabel, attribute: .trailing, relatedBy: .equal, toItem: self.containerView, attribute: .trailing, multiplier: 1.0, constant: 10).isActive = true
-        
-        let _ = NSLayoutConstraint.init(item: self.numberLabel, attribute: .bottom, relatedBy: .equal, toItem: self.containerView, attribute: .bottom, multiplier: 1.0, constant: 10).isActive = true
+        let _ = NSLayoutConstraint.init(item: self.numberLabel, attribute: .bottom, relatedBy: .equal, toItem: label1, attribute: .bottom, multiplier: 1.0, constant: 0).isActive = true
         
         let _ = NSLayoutConstraint.init(item: self.numberLabel, attribute: .leading, relatedBy: .equal, toItem: addressLabel, attribute: .trailing, multiplier: 1.0, constant: 10).isActive = true
-        
-        numberLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        numberLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
 
     }
     

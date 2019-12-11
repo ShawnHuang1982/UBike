@@ -15,7 +15,6 @@ class TabBarCellCollectionViewCell: UICollectionViewCell {
         didSet{
             self.titleLabel.text = viewModel.title
             self.titleLabel.font = viewModel.font
-            self.titleLabel.textColor = viewModel.color
             self.titleLabel.textAlignment = .center
         }
     }
