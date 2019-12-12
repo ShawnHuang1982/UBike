@@ -19,6 +19,9 @@ class StationInMapPageViewController: UIViewController {
     var listViewModel: [UBikeRentInfoViewModel]?{
         didSet{
             bottomSheetVC.listViewModel = self.listViewModel
+            self.listViewModel?.forEach({ [unowned self] (viewModel) in
+                makeAnnotaion(mapView: self.mapView, location: viewModel.staLocation?.coordinate, title: viewModel.sna, subTitle: viewModel.ar)
+            })
         }
     }
     
@@ -33,8 +36,32 @@ class StationInMapPageViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        moveToSelectLocation()
 
+    }
+    
+    private func makeSpecificAnnotation(){
+        makeAnnotaion(mapView: self.mapView, location: singleStationViewModel.staLocation?.coordinate, title:  singleStationViewModel.sna , subTitle: singleStationViewModel.sbi )
+
+    }
+    
+    private func moveToSelectLocation(){
+        //move to select location
+        // 1
+        guard singleStationViewModel != nil, let latitude = Double("\(singleStationViewModel.lat)"), let longitude = Double("\(singleStationViewModel.lng)") else {
+            //move to user location
+            if userlocation != nil, let location = userlocation?.coordinate{
+                moveLocation(location: location)
+            }else{
+                //default region
+                let defaultLoc = CLLocationCoordinate2D(latitude: 25.034255, longitude: 121.562781)
+                moveLocation(location: defaultLoc)
+            }
+            return
+        }
+        let location = CLLocationCoordinate2D(latitude: latitude,
+                                              longitude: longitude)
+        moveLocation(location: location)
     }
     
     private func initView(){
@@ -42,20 +69,6 @@ class StationInMapPageViewController: UIViewController {
         
         setMapView()
         addBottomSheeView()
-        
-        
-        //move to select location
-        // 1
-        guard singleStationViewModel != nil, let latitude = Double("\(singleStationViewModel.lat)"), let longitude = Double("\(singleStationViewModel.lng)") else {
-            //move to user
-            if userlocation != nil, let location = userlocation?.coordinate{
-                moveLocation(location: location, title: "", subTitle: "")
-            }
-            return
-        }
-        let location = CLLocationCoordinate2D(latitude: latitude,
-                                              longitude: longitude)
-        moveLocation(location: location, title: singleStationViewModel.sna ?? "", subTitle: singleStationViewModel.sbi ?? "")
     }
     
     private func addGesture(){
@@ -70,9 +83,10 @@ class StationInMapPageViewController: UIViewController {
         self.view.addSubview(bottomSheetVC.view)
         bottomSheetVC.view.translatesAutoresizingMaskIntoConstraints = false
         bottomSheetVC.didMove(toParent: self)
-        bottomSheetVC.view.roundCorners(corners: [.topRight, .topLeft], radius: 10)
+        bottomSheetVC.view.layer.cornerRadius = 10
+        bottomSheetVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner] // Top right corner, Top left corner respectivel
         bottomSheetVC.view.clipsToBounds = true
-        bottomSheetVCheight = bottomSheetVC.view.heightAnchor.constraint(equalToConstant: 300)
+        bottomSheetVCheight = bottomSheetVC.view.heightAnchor.constraint(equalToConstant: 380)
         
         //3
         NSLayoutConstraint.activate([
@@ -94,21 +108,22 @@ class StationInMapPageViewController: UIViewController {
         
         mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
     }
-        
-    private func moveLocation(location: CLLocationCoordinate2D?, title: String, subTitle: String){
+    
+    private func makeAnnotaion(mapView: MKMapView, location: CLLocationCoordinate2D?, title:String?, subTitle: String?){
         guard let loc = location else { return }
-        debugPrint(location)
-        // 2
-        let span = MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
-        let region = MKCoordinateRegion(center: loc, span: span)
-        mapView.setRegion(region, animated: true)
-        
-        //3
         let annotation = MKPointAnnotation()
         annotation.coordinate = loc
         annotation.title = title
         annotation.subtitle = subTitle
         mapView.addAnnotation(annotation)
+    }
+        
+    private func moveLocation(location: CLLocationCoordinate2D?){
+        guard let loc = location else { return }
+        // 2
+        let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        let region = MKCoordinateRegion(center: loc, span: span)
+        mapView.setRegion(region, animated: true)
     }
 }
 
@@ -118,6 +133,6 @@ extension StationInMapPageViewController: CardViewControllerDelegate{
             return
         }
         let loc = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-        moveLocation(location: loc, title: station.sareaen, subTitle: station.ar)
+        moveLocation(location: loc)
     }
 }

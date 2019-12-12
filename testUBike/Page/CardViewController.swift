@@ -63,7 +63,7 @@ class CardViewController: UIViewController {
     private func setTableView(){
         self.stackView.addArrangedSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.heightAnchor.constraint(equalToConstant: 450).isActive = true
+        tableView.heightAnchor.constraint(equalToConstant: 350).isActive = true
     }
     
     private func setNavigationToPlaceView(){

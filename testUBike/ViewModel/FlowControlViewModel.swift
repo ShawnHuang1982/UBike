@@ -26,7 +26,7 @@ class FlowControlViewModel {
     var sortedInfos: [UBikeRentInfoViewModel]?{
         get{
             self.infos?.filter{$0.act == "1"}.sorted(by: { (lhs, rhs) -> Bool in
-                return lhs.sno < rhs.sno
+                return lhs.sno > rhs.sno
             })
         }
     }
@@ -40,7 +40,9 @@ class FlowControlViewModel {
             }
             
             return self.infos?.sorted(by: { (lhs, rhs) -> Bool in
-                return Int(lhs.staLocation?.distance(from: usrLocation) ?? 0) > Int( rhs.staLocation?.distance(from: usrLocation) ?? 0)
+                let lhsDistance = Double(lhs.staLocation?.distance(from: usrLocation) ?? 0)
+                let rhsDistance = Double(rhs.staLocation?.distance(from: usrLocation) ?? 0)
+                return lhsDistance < rhsDistance
             }).map({ (viewModel) -> UBikeRentInfoViewModel in
                 var newViewModel = viewModel
                 newViewModel.usrLocation = usrLocation

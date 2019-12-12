@@ -79,7 +79,8 @@ class FlowController: UIViewController {
         flowControlViewModel.fetchData()
         flowControlViewModel.refreshViewClosure = {
             [unowned self, unowned flowControlViewModel] in
-            let infos =  self.userLocation != nil ? flowControlViewModel.sortedInfosByLocation : flowControlViewModel.sortedInfos
+            flowControlViewModel.userLocation = self.userLocation
+            let infos = self.userLocation != nil ? flowControlViewModel.sortedInfosByLocation : flowControlViewModel.sortedInfos
             self.listVC.viewModels = infos
             self.mapVC.listViewModel = infos
             debugPrint("refreshViewClosure")
@@ -89,7 +90,7 @@ class FlowController: UIViewController {
     private func setTimer(isOn: Bool){
         if isOn{
             timer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [unowned flowControlViewModel] (timer) in
-                flowControlViewModel.fetchData()
+                flowControlViewModel.fetchData()                
                 debugPrint("fetch data")
             }
             timer?.fire()
@@ -157,6 +158,7 @@ class FlowController: UIViewController {
     }
     
     @objc func scrollViews(notification: Notification){
+        mapVC.userlocation = self.userLocation
         if let info = notification.userInfo as? [String: Int]{
             self.collectionView?.scrollToItem(at: IndexPath(row: info["index"] ?? 0, section: 0), at: .centeredHorizontally, animated: true)
         }
@@ -207,6 +209,7 @@ extension FlowController: UICollectionViewDataSource, UICollectionViewDelegate, 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let scrollIndex = scrollView.contentOffset.x / self.view.bounds.width
         debugPrint(scrollIndex)
+        mapVC.userlocation = self.userLocation
         NotificationCenter.default.post(name: Notification.Name(rawValue: "scrollMenu"), object: nil, userInfo: ["length": scrollIndex])
     }
     
