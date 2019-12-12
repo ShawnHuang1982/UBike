@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class FlowController: UIViewController {
 
@@ -23,6 +24,9 @@ class FlowController: UIViewController {
     var timer: Timer?
     
     private var stationInMapPageViewController: StationInMapPageViewController?
+    
+    let locationManager = CLLocationManager()
+    var userLocation: CLLocation?
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -34,6 +38,7 @@ class FlowController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        requestPermission()
         initView()
         setViewModel()
     }
@@ -58,18 +63,32 @@ class FlowController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
+    private func requestPermission(){
+        let status = CLLocationManager.authorizationStatus()
+        if status == .authorizedWhenInUse || status == .authorizedAlways {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.delegate = self
+        }
+    }
+    
     private func setViewModel(){
         flowControlViewModel.fetchData()
         flowControlViewModel.refreshViewClosure = {
             [unowned self, unowned flowControlViewModel] in
-            self.listVC.viewModels = flowControlViewModel.sortedInfos
+            let infos =  self.userLocation != nil ? flowControlViewModel.sortedInfosByLocation : flowControlViewModel.sortedInfos
+            self.listVC.viewModels = infos
+            self.mapVC.listViewModel = infos
             debugPrint("refreshViewClosure")
         }
     }
     
     private func setTimer(isOn: Bool){
         if isOn{
-            timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [unowned flowControlViewModel] (timer) in
+            timer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [unowned flowControlViewModel] (timer) in
                 flowControlViewModel.fetchData()
                 debugPrint("fetch data")
             }
@@ -91,10 +110,10 @@ class FlowController: UIViewController {
         tabBarView = TabBarView(frame: .zero, viewModels: tabBarViewModels)
         self.view.addSubview(tabBarView)
         tabBarView.translatesAutoresizingMaskIntoConstraints = false
-        self.tabBarView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.tabBarView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 20).isActive = true
         self.tabBarView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         self.tabBarView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        self.tabBarView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        self.tabBarView.heightAnchor.constraint(equalToConstant: 90).isActive = true
         
         //layout
         let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -118,7 +137,8 @@ class FlowController: UIViewController {
         self.collectionView.isPagingEnabled = true
         self.collectionView.backgroundColor = .systemPink
 
-        viewcontrollers = [listVC, myFavoriteVC, mapVC]
+        //TODO: myFavoriteVC init if UserDefault exist
+        viewcontrollers = [listVC, mapVC]
         for vc in viewcontrollers{
             self.addChild(vc)
             vc.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height-80)
@@ -131,7 +151,7 @@ class FlowController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.scrollViews(notification:)), name: Notification.Name(rawValue: "didSelectMenu"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
         
-        self.view.backgroundColor = .black
+        self.view.backgroundColor = UIColor.rgba(23, 28, 27, 1)
 
         
     }
@@ -199,14 +219,16 @@ extension FlowController: StationListPageViewControllerDelegate{
         
         let stationInMapPageViewController = StationInMapPageViewController()
         stationInMapPageViewController.title = selectedStation.sareaen
-        stationInMapPageViewController.viewModel = selectedStation
+        stationInMapPageViewController.singleStationViewModel = selectedStation
         self.presentVC(vc: stationInMapPageViewController)
         self.stationInMapPageViewController = stationInMapPageViewController
         
         //FIXME: only for test
-        //let cardViewController = CardViewController()
-        //cardViewController.viewModel = selectedStation
-        //self.presentVC(vc: cardViewController)
+//        let cardViewController = CardViewController()
+//        cardViewController.singleStationViewModel = selectedStation
+//        let detail = StationDetail(sno: "123", sna: "456", tot: "", sbi: "", sarea: "", mday: "", lat: "", lng: "", ar: "", sareaen: "", snaen: "", aren: "", bemp: "", act: "")
+//        cardViewController.listViewModel = [UBikeRentInfoViewModel(model: detail)]
+//        self.presentVC(vc: cardViewController)
     
     }
     

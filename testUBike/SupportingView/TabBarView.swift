@@ -53,11 +53,11 @@ extension TabBarView{
     func initView() {
         
         //layout
-        let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 10, right: 20)
-        layout.minimumInteritemSpacing = 0
+        layout.estimatedItemSize = CGSize(width: 1, height: 1)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 20, right: 20)
+        //layout.minimumInteritemSpacing = 0
 
         //collectionView
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -74,8 +74,8 @@ extension TabBarView{
         self.collectionView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         self.collectionView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         self.collectionView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-
-        self.backgroundColor = UIColor.blue
+        self.backgroundColor = .rgba(23, 28, 27, 1)
+        self.collectionView.backgroundColor = .rgba(23, 28, 27, 1)
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.animateMenu(notification:)), name: Notification.Name(rawValue: "scrollMenu"), object: nil)
         

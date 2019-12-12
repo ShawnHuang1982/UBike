@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 struct UBikeRentInfoViewModel {
     
@@ -34,6 +35,37 @@ struct UBikeRentInfoViewModel {
     var lat: String //"25.0408578889"
     ///經度
     var lng: String // "121.567904444"
+    
+    var staLocation: CLLocation?{
+        get{
+            guard let lat = Double(self.lat) else { return nil }
+            guard let lng = Double(self.lng) else { return nil }
+            return CLLocation(latitude: lat, longitude: lng)
+        }
+    }
+    
+    var usrLocation: CLLocation?
+    
+    var distance: Int?{
+        get{
+            guard let usrLoc = usrLocation, let staLoc = self.staLocation else { return nil }
+            let distance = usrLoc.distance(from: staLoc)
+            return Int(distance)
+        }
+    }
+    
+    var distanceColor: UIColor?{
+        get{
+            guard let distance = self.distance else { return nil }
+            if distance >= 1000{
+                return UIColor.rgba(255, 110, 121, 1)
+            }else if distance <= 200{
+                return UIColor.rgba(0, 203, 169, 1)
+            }else{
+                return UIColor.rgba(250, 173, 23, 1)
+            }
+        }
+    }
     
     enum RentStatus{
         case almostEmpty

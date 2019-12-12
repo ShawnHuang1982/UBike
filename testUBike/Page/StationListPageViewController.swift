@@ -30,8 +30,7 @@ class StationListPageViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 64
         tableView.delegate = self
-        tableView.dataSource = self
-        
+        tableView.dataSource = self        
         return tableView
     }()
     
@@ -40,7 +39,7 @@ class StationListPageViewController: UIViewController {
     lazy var segment: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["借車", "還車"])
         segment.tintColor = UIColor.white
-        segment.backgroundColor = UIColor.lightGray
+        segment.backgroundColor = .rgba(77, 77, 77, 1)//.rgba(23, 28, 27, 1)
         return segment
     }()
     
@@ -55,7 +54,7 @@ class StationListPageViewController: UIViewController {
     private func initView(){
         setSegment()
         setTableView()
-        self.view.backgroundColor = UIColor.black
+        self.view.backgroundColor = UIColor.rgba(23, 28, 27, 1)
     }
     
     @objc func tapSegemnt(){
@@ -84,7 +83,7 @@ class StationListPageViewController: UIViewController {
         tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
         tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
         tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-        tableView.backgroundColor = .black
+        tableView.backgroundColor = .rgba(23, 28, 27, 1)
     }
 
 
@@ -129,7 +128,7 @@ extension StationListPageViewController: UIViewControllerPreviewingDelegate{
         if let indexPath = tableView.indexPathForRow(at: location), let viewModel = viewModels?[indexPath.row] {
             selectedIndexPath = indexPath
             let cardVC = CardViewController()
-            cardVC.viewModel = viewModel
+            cardVC.singleStationViewModel = viewModel
             cardVC.preferredContentSize = CGSize(width: 0.0, height: 450)
             return cardVC
         }

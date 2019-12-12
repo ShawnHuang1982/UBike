@@ -5,7 +5,9 @@
 //  Created by shawn on 2019/12/9.
 //  Copyright © 2019 yu-syue huang. All rights reserved.
 //
-
+protocol CardViewControllerDelegate: class {
+    func selectedStation(station: UBikeRentInfoViewModel)
+}
 import UIKit
 
 class CardViewController: UIViewController {
@@ -14,7 +16,32 @@ class CardViewController: UIViewController {
     var navigationView: UIView = UIView()
     var info: [InfomationModel]?
     
-    var viewModel: UBikeRentInfoViewModel?
+    var singleStationViewModel: UBikeRentInfoViewModel?
+    var listViewModel: [UBikeRentInfoViewModel]?{
+        didSet{
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    weak var delegate: CardViewControllerDelegate?
+    
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .rgba(36, 40, 40, 1)
+        tableView.register(ListInMapTableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.separatorStyle = .none
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 64
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.layoutMargins = UIEdgeInsets.zero
+        tableView.separatorInset = UIEdgeInsets.zero
+        //tableView.roundCorners(corners: [.topLeft, .topRight], radius: 10)
+        return tableView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,10 +51,7 @@ class CardViewController: UIViewController {
 
     private func initView(){
         debugPrint("👉initView")
-        //self.view.backgroundColor = .green
         setStackView()
-        setNavigationToPlaceView()
-        setInfomationView(viewModel: self.viewModel)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -36,16 +60,26 @@ class CardViewController: UIViewController {
 //        }
     }
     
+    private func setTableView(){
+        self.stackView.addArrangedSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.heightAnchor.constraint(equalToConstant: 450).isActive = true
+    }
+    
     private func setNavigationToPlaceView(){
-        
+        navigationView.backgroundColor = .green
         self.stackView.addArrangedSubview(navigationView)
-        
-        navigationView.translatesAutoresizingMaskIntoConstraints = false
+       
+    navigationView.translatesAutoresizingMaskIntoConstraints = false
         navigationView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        navigationView.topAnchor.constraint(equalTo: self.stackView.topAnchor).isActive = true
+        //navigationView.topAnchor.constraint(equalTo: self.stackView.topAnchor).isActive = true
         //navigationView.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor, constant: 16).isActive = true
         //navigationView.trailingAnchor.constraint(equalTo: self.stackView.trailingAnchor, constant: 0).isActive = true
         navigationView.backgroundColor = .white
+    }
+    
+    private func setListInfo(viewModel: UBikeRentInfoViewModel?){
+        
     }
     
     private func setInfomationView(viewModel: UBikeRentInfoViewModel?){
@@ -118,5 +152,39 @@ class CardViewController: UIViewController {
         stackView.distribution = .fill
         stackView.alignment = .fill
         stackView.spacing = 1
+        
+        let emptyView = UIView()
+        emptyView.backgroundColor = .clear
+        stackView.addArrangedSubview(emptyView)
+        
+        setTableView()
+        //setNavigationToPlaceView()
+        //setInfomationView(viewModel: self.singleStationViewModel)
+
     }
+}
+
+extension CardViewController: UITableViewDataSource, UITableViewDelegate{
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = ListInMapTableViewCell(viewModel: listViewModel?[indexPath.row], reuseIdentifier: "Cell")
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return listViewModel?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let station = listViewModel?[indexPath.row]{
+            debugPrint("selected station= ", station)
+            delegate?.selectedStation(station: station)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
 }
