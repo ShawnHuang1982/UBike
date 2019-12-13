@@ -38,17 +38,28 @@ struct UBikeRentInfoViewModel {
     
     var staLocation: CLLocation?{
         get{
-            guard let lat = Double(self.lat) else { return nil }
-            guard let lng = Double(self.lng) else { return nil }
+            
+            guard let lat = Double(self.lat.trimmingCharacters(in: .whitespaces)), let lng = Double(self.lng.trimmingCharacters(in: .whitespaces)) else {
+                debugPrint("no staLocation", self.lat, self.lng)
+                return nil
+            }
             return CLLocation(latitude: lat, longitude: lng)
         }
     }
     
-    var usrLocation: CLLocation?
+    var usrLocation: CLLocation?{
+        didSet{
+            //debugPrint("👉userlocation", self.usrLocation)
+        }
+    }
     
     var distance: Int?{
         get{
-            guard let usrLoc = usrLocation, let staLoc = self.staLocation else { return nil }
+            guard let usrLoc = usrLocation, let staLoc = self.staLocation else {
+                debugPrint("no usr location")
+                return nil
+            }
+            //debugPrint(usrLoc)
             let distance = usrLoc.distance(from: staLoc)
             return Int(distance)
         }
