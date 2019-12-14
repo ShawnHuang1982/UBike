@@ -82,10 +82,10 @@ class StationInMapPageViewController: UIViewController {
         self.view.addSubview(bottomSheetVC.view)
         bottomSheetVC.view.translatesAutoresizingMaskIntoConstraints = false
         bottomSheetVC.didMove(toParent: self)
-        bottomSheetVC.view.backgroundColor = .clear
         bottomSheetVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner] // Top right corner, Top left corner respectivel
         bottomSheetVC.view.layer.cornerRadius = 10
         bottomSheetVC.view.clipsToBounds = true
+        bottomSheetVC.selectMode(mode: .fixedHeight(.list))
         bottomSheetVCheight = bottomSheetVC.view.heightAnchor.constraint(equalToConstant: 380)
         
         //3
@@ -107,6 +107,8 @@ class StationInMapPageViewController: UIViewController {
         mapView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
         
         mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+        
+        mapView.delegate = self
         
     }
     
@@ -144,6 +146,23 @@ class StationInMapPageViewController: UIViewController {
 }
 
 extension StationInMapPageViewController: CardViewControllerDelegate{
+    
+    func panGesture(offsetY: CGFloat) {
+        let newHeight = bottomSheetVCheight.constant - offsetY
+        debugPrint(newHeight)
+        UIView.animate(withDuration: 0.1) {
+            if CardMode.scrollable(.card).contentHeight < newHeight && newHeight < CardMode.fixedHeight(.list).contentHeight{
+                self.bottomSheetVCheight.constant = newHeight
+            }else if newHeight < CardMode.scrollable(.card).contentHeight {
+                self.bottomSheetVCheight.constant = CardMode.scrollable(.card).contentHeight
+            }else if newHeight > CardMode.fixedHeight(.list).contentHeight{
+                self.bottomSheetVCheight.constant = CardMode.fixedHeight(.list).contentHeight
+            }
+            self.view.layoutIfNeeded()
+        }
+
+    }
+    
     func selectedStation(station: UBikeRentInfoViewModel) {
         guard let loc = station.staLocation else {
             return
@@ -156,5 +175,30 @@ extension StationInMapPageViewController: CardViewControllerDelegate{
         }.first
         guard let _ano = ano else { return }
         mapView.selectAnnotation(_ano, animated: true)
+        bottomSheetVC.selectMode(mode: .scrollable(.card))
+        UIView.animate(withDuration: 0.3) { [unowned self] in
+            self.bottomSheetVCheight.constant = CardMode.scrollable(.card).contentHeight
+        }
+    }
+}
+
+extension StationInMapPageViewController: MKMapViewDelegate{
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        bottomSheetVC.selectMode(mode: .scrollable(.card))
+        let viewModel = listViewModel?.filter{$0.sna == (view.annotation?.title ?? "")}.first
+        bottomSheetVC.singleStationViewModel = viewModel
+        UIView.animate(withDuration: 0.3) { [unowned self] in
+            self.bottomSheetVCheight.constant = CardMode.scrollable(.card).contentHeight
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        bottomSheetVC.selectMode(mode: .fixedHeight(.list))
+        bottomSheetVC.listViewModel = listViewModel
+        UIView.animate(withDuration: 0.3) { [unowned self] in
+            self.bottomSheetVCheight.constant = CardMode.fixedHeight(.list).contentHeight
+            self.view.layoutIfNeeded()
+        }
     }
 }

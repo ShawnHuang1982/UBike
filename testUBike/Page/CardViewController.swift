@@ -7,16 +7,48 @@
 //
 protocol CardViewControllerDelegate: class {
     func selectedStation(station: UBikeRentInfoViewModel)
+    func panGesture(offsetY: CGFloat)
 }
+
+enum CardMode: Equatable {
+    
+    enum type{
+        case list
+        case card
+    }
+    
+    case fixedHeight(type)
+    case scrollable(type)
+    
+    var contentHeight: CGFloat {
+        get{
+            switch self {
+            case .fixedHeight(.list): return 380
+            case .scrollable(.card): return 200
+            default: return 100
+            }
+        }
+    }
+}
+
 import UIKit
 
 class CardViewController: UIViewController {
 
     let stackView: UIStackView = UIStackView()
     var navigationView: UIView = UIView()
+    var gestureView: UIView = UIView()
     var info: [InfomationModel]?
     
-    var singleStationViewModel: UBikeRentInfoViewModel?
+    var displayType: CardMode = .fixedHeight(.list)
+    
+    var singleStationViewModel: UBikeRentInfoViewModel?{
+        didSet{
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
     var listViewModel: [UBikeRentInfoViewModel]?{
         didSet{
             DispatchQueue.main.async {
@@ -30,7 +62,7 @@ class CardViewController: UIViewController {
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .rgba(36, 40, 40, 1)
-        tableView.register(ListInMapTableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(ListInMapTableViewCell.self, forCellReuseIdentifier: "ListCell")
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.rowHeight = UITableView.automaticDimension
@@ -39,8 +71,11 @@ class CardViewController: UIViewController {
         tableView.dataSource = self
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorInset = UIEdgeInsets.zero
+        tableView.tableFooterView = UIView()
         return tableView
     }()
+    
+    private var stackViewHeight: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,19 +85,36 @@ class CardViewController: UIViewController {
 
     private func initView(){
         debugPrint("👉initView")
+        self.view.backgroundColor = .rgba(36, 40, 40, 1)
         setStackView()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-//        UIView.animate(withDuration: 0.3) {
-//            [weak self] in
-//        }
+    private func setScrollIndicator(){
+        self.stackView.addArrangedSubview(self.gestureView)
+        gestureView.backgroundColor = .rgba(36, 40, 40, 1)
+        gestureView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        gestureView.translatesAutoresizingMaskIntoConstraints = false
+        let indicator = UIView()
+        gestureView.addSubview(indicator)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.centerXAnchor.constraint(equalTo: self.gestureView.centerXAnchor).isActive = true
+        indicator.centerYAnchor.constraint(equalTo: self.gestureView.centerYAnchor).isActive = true
+        indicator.heightAnchor.constraint(equalToConstant: 4).isActive = true
+        indicator.widthAnchor.constraint(equalToConstant: 26).isActive = true
+        indicator.backgroundColor = .rgba(77, 77, 77, 1)
+        
+        let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
+         gestureView.addGestureRecognizer(gesture)
+    }
+    
+    @objc func panGesture(recognizer: UIPanGestureRecognizer){
+        let translation = recognizer.translation(in: self.view)
+        delegate?.panGesture(offsetY: translation.y)
     }
     
     private func setTableView(){
         self.stackView.addArrangedSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.heightAnchor.constraint(equalToConstant: 350).isActive = true
     }
     
     private func setNavigationToPlaceView(){
@@ -100,7 +152,6 @@ class CardViewController: UIViewController {
     private func setHeaderItemInfoView() -> UIView{
         let headerView = UIView()
         self.stackView.addArrangedSubview(headerView)
-        
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.backgroundColor = .white
         
@@ -146,7 +197,9 @@ class CardViewController: UIViewController {
         stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
         stackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
         stackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10).isActive = true
-        
+        stackViewHeight = stackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 350)
+        stackViewHeight.isActive = true
+
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.alignment = .fill
@@ -154,8 +207,10 @@ class CardViewController: UIViewController {
         
         let emptyView = UIView()
         emptyView.backgroundColor = .rgba(36, 40, 40, 1)
+        emptyView.heightAnchor.constraint(equalToConstant: 10).isActive = true
         stackView.addArrangedSubview(emptyView)
-        
+        stackView.backgroundColor = .rgba(36, 40, 40, 1)
+        setScrollIndicator()
         setTableView()
         //setNavigationToPlaceView()
         //setInfomationView(viewModel: self.singleStationViewModel)
@@ -166,17 +221,22 @@ class CardViewController: UIViewController {
 extension CardViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ListInMapTableViewCell(viewModel: listViewModel?[indexPath.row], reuseIdentifier: "Cell")
+        
+        let viewModel = displayType == .fixedHeight(.list) ? listViewModel?[indexPath.row] : singleStationViewModel
+        let cell = ListInMapTableViewCell(viewModel: viewModel, reuseIdentifier: "ListCell")
         cell.selectionStyle = .none
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listViewModel?.count ?? 0
+        return (displayType == CardMode.fixedHeight(.list)) ? (listViewModel?.count ?? 0 ) : 1
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let station = listViewModel?[indexPath.row]{
+        
+        let viewModel = displayType == .fixedHeight(.list) ? listViewModel?[indexPath.row] : singleStationViewModel
+        
+        if let station = viewModel {
             debugPrint("selected station= ", station)
             delegate?.selectedStation(station: station)
         }
@@ -184,6 +244,24 @@ extension CardViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
+    }
+    
+}
+
+extension CardViewController {
+    func selectMode( mode: CardMode){
+        self.displayType = mode
+        switch mode {
+        case .fixedHeight(.list):
+            stackViewHeight.constant = 350
+            gestureView.isHidden = true
+        case .scrollable(.card):
+            stackViewHeight.constant = 200
+            gestureView.isHidden = false
+        default:
+            tableView.isHidden = false
+            gestureView.isHidden = false
+        }
     }
     
 }
