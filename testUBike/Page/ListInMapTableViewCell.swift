@@ -110,7 +110,7 @@ class ListInMapTableViewCell: UITableViewCell {
         containerView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 17).isActive = true
         containerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -17).isActive = true
         
-        containerView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive = true
+        containerView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 0).isActive = true
         
         containerView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 0).isActive = true
         

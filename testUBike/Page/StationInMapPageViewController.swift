@@ -37,7 +37,6 @@ class StationInMapPageViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         moveToSelectLocation()
-
     }
     
     private func makeSpecificAnnotation(){
@@ -83,8 +82,9 @@ class StationInMapPageViewController: UIViewController {
         self.view.addSubview(bottomSheetVC.view)
         bottomSheetVC.view.translatesAutoresizingMaskIntoConstraints = false
         bottomSheetVC.didMove(toParent: self)
-        bottomSheetVC.view.layer.cornerRadius = 10
+        bottomSheetVC.view.backgroundColor = .clear
         bottomSheetVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner] // Top right corner, Top left corner respectivel
+        bottomSheetVC.view.layer.cornerRadius = 10
         bottomSheetVC.view.clipsToBounds = true
         bottomSheetVCheight = bottomSheetVC.view.heightAnchor.constraint(equalToConstant: 380)
         
@@ -107,6 +107,7 @@ class StationInMapPageViewController: UIViewController {
         mapView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
         
         mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+        
     }
     
     private func makeAnnotaion(mapView: MKMapView, location: CLLocationCoordinate2D?, title:String?, subTitle: String?){
@@ -124,15 +125,36 @@ class StationInMapPageViewController: UIViewController {
         let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         let region = MKCoordinateRegion(center: loc, span: span)
         mapView.setRegion(region, animated: true)
+        // Adjust padding here
+        let rect = MKMapRectForCoordinateRegion(region: region)
+        let insets = UIEdgeInsets(top: 0, left: 0, bottom: 300, right: 0)
+        mapView.setVisibleMapRect(rect, edgePadding: insets, animated: true)
+    }
+    
+    // Convert CoordinateRegion to MapRect
+    func MKMapRectForCoordinateRegion(region:MKCoordinateRegion) -> MKMapRect {
+        let topLeft = CLLocationCoordinate2D(latitude: region.center.latitude + (region.span.latitudeDelta/2), longitude: region.center.longitude - (region.span.longitudeDelta/2))
+        let bottomRight = CLLocationCoordinate2D(latitude: region.center.latitude - (region.span.latitudeDelta/2), longitude: region.center.longitude + (region.span.longitudeDelta/2))
+        
+        let a = MKMapPoint(topLeft)
+        let b = MKMapPoint(bottomRight)
+        
+        return MKMapRect(origin: MKMapPoint(x:min(a.x,b.x), y:min(a.y,b.y)), size: MKMapSize(width: abs(a.x-b.x), height: abs(a.y-b.y)))
     }
 }
 
 extension StationInMapPageViewController: CardViewControllerDelegate{
     func selectedStation(station: UBikeRentInfoViewModel) {
-        guard let lat = CLLocationDegrees(station.lat), let lng = CLLocationDegrees(station.lng) else {
+        guard let loc = station.staLocation else {
             return
         }
-        let loc = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-        moveLocation(location: loc)
+        moveLocation(location: loc.coordinate)
+        
+        //select annotation
+        let ano = mapView.annotations.filter { (annotation) -> Bool in
+            return (annotation.coordinate.latitude == loc.coordinate.latitude) && (annotation.coordinate.longitude == loc.coordinate.longitude)
+        }.first
+        guard let _ano = ano else { return }
+        mapView.selectAnnotation(_ano, animated: true)
     }
 }

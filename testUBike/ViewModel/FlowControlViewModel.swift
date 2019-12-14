@@ -49,7 +49,6 @@ class FlowControlViewModel {
             let sortedAry = newViewModels?.sorted(by: { (lhs, rhs) -> Bool in
                 return lhs.distance ?? 0 < rhs.distance ?? 0
             })
-            //debugPrint("👉1 sortedInfosByLocation first",sortedAry?.first?.sna, sortedAry?.first?.distance)
             return sortedAry
         }
     }

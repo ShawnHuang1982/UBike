@@ -39,7 +39,6 @@ class CardViewController: UIViewController {
         tableView.dataSource = self
         tableView.layoutMargins = UIEdgeInsets.zero
         tableView.separatorInset = UIEdgeInsets.zero
-        //tableView.roundCorners(corners: [.topLeft, .topRight], radius: 10)
         return tableView
     }()
     
@@ -151,10 +150,10 @@ class CardViewController: UIViewController {
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.alignment = .fill
-        stackView.spacing = 1
+        stackView.spacing = 0
         
         let emptyView = UIView()
-        emptyView.backgroundColor = .clear
+        emptyView.backgroundColor = .rgba(36, 40, 40, 1)
         stackView.addArrangedSubview(emptyView)
         
         setTableView()
