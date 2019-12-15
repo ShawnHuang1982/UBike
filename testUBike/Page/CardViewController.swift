@@ -340,7 +340,7 @@ extension CardViewController: UITableViewDataSource, UITableViewDelegate{
 }
 
 extension CardViewController {
-    func selectMode( mode: CardMode){
+    func selectMode(mode: CardMode){
         self.displayType = mode
         switch mode {
         case .fixedHeight(.list):
@@ -358,8 +358,12 @@ extension CardViewController {
             navigationView.isHidden = true
         case .scrollable(.cardAndNavigation):
             debugPrint(".scrollable(.cardAndNavigation)")
-            stackViewHeight.constant = 360
-            tableViewHeight.constant  = 105
+            if stackViewHeight != nil{
+                stackViewHeight.constant = 360
+            }
+            if tableViewHeight != nil{
+                tableViewHeight.constant  = 105
+            }
             gestureView.isHidden = false
             infoItemView.isHidden = false
             navigationView.isHidden = false

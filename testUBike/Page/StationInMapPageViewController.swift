@@ -15,7 +15,14 @@ class StationInMapPageViewController: UIViewController {
     let mapView: MKMapView! = MKMapView()
     
     var userlocation: CLLocation?
-    var singleStationViewModel: UBikeRentInfoViewModel!
+    var singleStationViewModel: UBikeRentInfoViewModel!{
+        didSet{
+             makeAnnotaion(mapView: self.mapView, location: singleStationViewModel.staLocation?.coordinate, title: singleStationViewModel.sna, subTitle: singleStationViewModel.ar)
+            addBottomSheeView(mode: .scrollable(.cardAndNavigation))
+            self.bottomSheetVC.singleStationViewModel = singleStationViewModel
+            self.bottomSheetVCheight.constant = CardMode.scrollable(.cardAndNavigation).contentHeight
+        }
+    }
     var listViewModel: [UBikeRentInfoViewModel]?{
         didSet{
             bottomSheetVC.listViewModel = self.listViewModel
@@ -71,13 +78,7 @@ class StationInMapPageViewController: UIViewController {
         addBottomSheeView()
     }
     
-    private func addGesture(){
-//        let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
-//           view.addGestureRecognizer(gesture)
-
-    }
-    
-    private func addBottomSheeView(){
+    private func addBottomSheeView(mode: CardMode = .fixedHeight(.list)){
         bottomSheetVC.delegate = self
         self.addChild(bottomSheetVC)
         self.view.addSubview(bottomSheetVC.view)
@@ -86,7 +87,7 @@ class StationInMapPageViewController: UIViewController {
         bottomSheetVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner] // Top right corner, Top left corner respectivel
         bottomSheetVC.view.layer.cornerRadius = 10
         bottomSheetVC.view.clipsToBounds = true
-        bottomSheetVC.selectMode(mode: .fixedHeight(.list))
+        bottomSheetVC.selectMode(mode: mode)
         bottomSheetVCheight = bottomSheetVC.view.heightAnchor.constraint(equalToConstant: 380)
         
         //3
@@ -149,6 +150,11 @@ class StationInMapPageViewController: UIViewController {
 extension StationInMapPageViewController: CardViewControllerDelegate{
     
     func panGesture(originHeight:CGFloat, offsetY: CGFloat) {
+        
+        guard singleStationViewModel == nil else {
+            return
+        }
+        
         UIView.animate(withDuration: 0.1) {
             if offsetY < 0 {
                 self.bottomSheetVC.selectMode(mode: .scrollable(.cardAndNavigation))

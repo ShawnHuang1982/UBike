@@ -23,8 +23,6 @@ class FlowController: UIViewController {
     var views: [UIView] = []
     var timer: Timer?
     
-    private var stationInMapPageViewController: StationInMapPageViewController?
-    
     let locationManager = CLLocationManager()
     var userLocation: CLLocation?
 
@@ -102,7 +100,10 @@ class FlowController: UIViewController {
     private func initView(){
         
         //tabarView
-        let tabBarNames = ["列表", "地圖", "我的最愛"]
+        let isFavoriteExist = flowControlViewModel.infos?.filter({ (viewMode) -> Bool in
+            return viewMode.isFavorite == true
+            }).count ?? 0 > 0
+        let tabBarNames = isFavoriteExist ? ["列表", "地圖", "我的最愛"] : ["列表", "地圖"]
         var tabBarViewModels: [TabBarViewModel] = []
         for name in tabBarNames{
             let viewModel = TabBarViewModel(model: TabBarModel(title: name))
@@ -136,7 +137,7 @@ class FlowController: UIViewController {
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         //self.collectionView.alwaysBounceVertical = false
         self.collectionView.isPagingEnabled = true
-        self.collectionView.backgroundColor = .systemPink
+        self.collectionView.backgroundColor = .rgba(23, 28, 27, 1)
 
         //TODO: myFavoriteVC init if UserDefault exist
         viewcontrollers = [listVC, mapVC]
@@ -223,20 +224,12 @@ extension FlowController: StationListPageViewControllerDelegate{
     }
     
     func stationListPageViewControllerDidSelectStation(_ selectedStation: UBikeRentInfoViewModel) {
-        
+
         let stationInMapPageViewController = StationInMapPageViewController()
-        stationInMapPageViewController.title = selectedStation.sareaen
-        stationInMapPageViewController.singleStationViewModel = selectedStation
         self.presentVC(vc: stationInMapPageViewController)
-        self.stationInMapPageViewController = stationInMapPageViewController
+        stationInMapPageViewController.singleStationViewModel = selectedStation
         
-        //FIXME: only for test
-//        let cardViewController = CardViewController()
-//        cardViewController.singleStationViewModel = selectedStation
-//        let detail = StationDetail(sno: "123", sna: "456", tot: "", sbi: "", sarea: "", mday: "", lat: "", lng: "", ar: "", sareaen: "", snaen: "", aren: "", bemp: "", act: "")
-//        cardViewController.listViewModel = [UBikeRentInfoViewModel(model: detail)]
-//        self.presentVC(vc: cardViewController)
-    
+        
     }
     
     func presentVC(vc: UIViewController){
