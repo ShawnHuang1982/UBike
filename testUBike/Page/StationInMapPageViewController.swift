@@ -149,14 +149,15 @@ class StationInMapPageViewController: UIViewController {
 extension StationInMapPageViewController: CardViewControllerDelegate{
     
     func panGesture(originHeight:CGFloat, offsetY: CGFloat) {
-        let newHeight = originHeight - offsetY
         UIView.animate(withDuration: 0.1) {
-            if CardMode.scrollable(.card).contentHeight < newHeight && newHeight < CardMode.fixedHeight(.list).contentHeight{
-                self.bottomSheetVCheight.constant = newHeight
-            }else if newHeight < CardMode.scrollable(.card).contentHeight {
+            if offsetY < 0 {
+                self.bottomSheetVC.selectMode(mode: .scrollable(.cardAndNavigation))
+                self.bottomSheetVCheight.constant = CardMode.scrollable(.cardAndNavigation).contentHeight
+                
+                
+            }else{
+                self.bottomSheetVC.selectMode(mode: .scrollable(.card))
                 self.bottomSheetVCheight.constant = CardMode.scrollable(.card).contentHeight
-            }else if newHeight > CardMode.fixedHeight(.list).contentHeight{
-                self.bottomSheetVCheight.constant = CardMode.fixedHeight(.list).contentHeight
             }
             self.view.layoutIfNeeded()
         }

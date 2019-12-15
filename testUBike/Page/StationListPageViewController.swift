@@ -10,13 +10,16 @@ import UIKit
 
 protocol StationListPageViewControllerDelegate: class {
     func stationListPageViewControllerDidSelectStation(_ selectedStation: UBikeRentInfoViewModel)
+    func reloadData()
 }
 
 class StationListPageViewController: UIViewController {
     
+    
     var viewModels: [UBikeRentInfoViewModel]?{
         didSet{
             DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
                 self.tableView.reloadData()
             }
         }
@@ -44,6 +47,18 @@ class StationListPageViewController: UIViewController {
         return segment
     }()
     
+    ///給上拉刷新提示用
+    var refreshControl : UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(pullRefreshData(_:)), for: UIControl.Event.valueChanged)
+        refreshControl.tintColor = .gray
+        return refreshControl
+    }()
+    
+    @objc func pullRefreshData(_ sender:UIRefreshControl){
+        delegate?.reloadData()
+    }
+    
     private var selectedIndexPath: IndexPath?
     
     override func viewDidLoad() {
@@ -56,6 +71,14 @@ class StationListPageViewController: UIViewController {
         setSegment()
         setTableView()
         self.view.backgroundColor = UIColor.rgba(23, 28, 27, 1)
+        
+        if self.refreshControl.isRefreshing
+        {
+            let offset = self.tableView.contentOffset
+            self.refreshControl.endRefreshing()
+            self.refreshControl.beginRefreshing()
+            self.tableView.contentOffset = offset
+        }
     }
     
     @objc func tapSegemnt(){
@@ -85,6 +108,9 @@ class StationListPageViewController: UIViewController {
         tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
         tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
         tableView.backgroundColor = .rgba(23, 28, 27, 1)
+        
+        tableView.addSubview(self.refreshControl)
+
     }
 
 
@@ -113,6 +139,7 @@ extension StationListPageViewController: UITableViewDataSource, UITableViewDeleg
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
+    
     
 }
 

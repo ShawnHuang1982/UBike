@@ -15,6 +15,7 @@ enum CardMode: Equatable {
     enum type{
         case list
         case card
+        case cardAndNavigation
     }
     
     case fixedHeight(type)
@@ -24,7 +25,8 @@ enum CardMode: Equatable {
         get{
             switch self {
             case .fixedHeight(.list): return 380
-            case .scrollable(.card): return 350
+            case .scrollable(.card): return 200
+            case .scrollable(.cardAndNavigation): return 400
             default: return 100
             }
         }
@@ -32,6 +34,7 @@ enum CardMode: Equatable {
 }
 
 import UIKit
+import CoreLocation
 
 class CardViewController: UIViewController {
 
@@ -52,7 +55,7 @@ class CardViewController: UIViewController {
                 self.tableView.reloadData()
                 self.bind1(self.singleStationViewModel?.bemp, self.singleStationViewModel?.bempColor?.font)
                 self.bind2(self.singleStationViewModel?.sbi, self.singleStationViewModel?.sbiColor?.font)
-                self.bind3("", self.singleStationViewModel?.defaultFontColor)
+                self.bind3(self.singleStationViewModel?.act == "1" ? "開放中" : "暫停營運", self.singleStationViewModel?.defaultFontColor)
             }
         }
     }
@@ -133,38 +136,48 @@ class CardViewController: UIViewController {
     }
     
     private func setNavigationToPlaceView(){
-        navigationView.backgroundColor = .green
+        navigationView.backgroundColor = .rgba(36, 40, 40, 1)
         self.stackView.addArrangedSubview(navigationView)
-       
-    navigationView.translatesAutoresizingMaskIntoConstraints = false
+        
+        navigationView.translatesAutoresizingMaskIntoConstraints = false
         navigationView.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        //navigationView.topAnchor.constraint(equalTo: self.stackView.topAnchor).isActive = true
-        //navigationView.leadingAnchor.constraint(equalTo: self.stackView.leadingAnchor, constant: 16).isActive = true
-        //navigationView.trailingAnchor.constraint(equalTo: self.stackView.trailingAnchor, constant: 0).isActive = true
-        navigationView.backgroundColor = .white
+        navigationView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        let buttonView = UIButton()
+        navigationView.addSubview(buttonView)
+        buttonView.translatesAutoresizingMaskIntoConstraints = false
+        buttonView.layer.cornerRadius = 10
+        buttonView.addTarget(self, action: #selector(tapNavigation), for: .touchUpInside)
+        buttonView.topAnchor.constraint(equalTo: self.navigationView.topAnchor, constant: 0).isActive = true
+         buttonView.bottomAnchor.constraint(equalTo: self.navigationView.bottomAnchor, constant: 0).isActive = true
+        buttonView.leadingAnchor.constraint(equalTo: self.navigationView.leadingAnchor, constant: 16).isActive = true
+        buttonView.trailingAnchor.constraint(equalTo: self.navigationView.trailingAnchor, constant: -16).isActive = true
+        buttonView.backgroundColor = .rgba(0, 199, 165, 1)
+        buttonView.setTitle("導航", for: .normal)
     }
     
+    @objc private func tapNavigation(){
+        let lat = (self.singleStationViewModel?.lat ?? "").trimmingCharacters(in: .whitespaces)
+        let lng = (self.singleStationViewModel?.lng ?? "").trimmingCharacters(in: .whitespaces)
+        let urlString = "http://maps.apple.com/" + "?ll=\(lat),\(lng)"
+        guard let url = URL(string: urlString) else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+
     private func setInfomationView( viewModel: UBikeRentInfoViewModel?){
         
         let textColor: UIColor = .rgba(174, 174, 174, 1)
         let row1 = InfomationViewModel(iconName: "bike", prefix: "可借", description: "0", suffix: "輛", descriptionFont: viewModel?.font, descriptionColor: textColor, defaultTextColor: textColor)
         let row2 = InfomationViewModel(iconName: "icon_parking", prefix: "可還", description: "0", suffix: "輛", descriptionFont: viewModel?.font, descriptionColor: textColor, defaultTextColor: textColor)
-        let row3 = InfomationViewModel(iconName: "access_time", prefix: "下載中", description: "", suffix: "", descriptionFont: viewModel?.font, descriptionColor: textColor, defaultTextColor: textColor)
+        let row3 = InfomationViewModel(iconName: "access_time", prefix: "", description: "", suffix: "", descriptionFont: viewModel?.font, descriptionColor: textColor, defaultTextColor: textColor)
         info = [row1, row2, row3]
         self.stackView.addArrangedSubview(infoItemView)
         infoItemView.translatesAutoresizingMaskIntoConstraints = false
-        infoItemView.heightAnchor.constraint(equalToConstant: 126).isActive = true
+        infoItemView.heightAnchor.constraint(equalToConstant: 146).isActive = true
         infoItemView.axis = .vertical
         infoItemView.distribution = .fill
         infoItemView.alignment = .fill
         infoItemView.spacing = 10
-                
-        let lineView = UIView()
-        infoItemView.addArrangedSubview(lineView)
-        lineView.translatesAutoresizingMaskIntoConstraints = false
-        lineView.backgroundColor = .rgba(23, 28, 27, 1)
-        lineView.heightAnchor.constraint(equalToConstant: 2).isActive = true
-        
+                        
         guard let info = self.info else { return }
         for (i,data) in info.enumerated(){
             let containerView = UIView()
@@ -174,9 +187,9 @@ class CardViewController: UIViewController {
             setSingleItemInfoView(containerView: containerView, icon: UIImage(named: "\(data.iconName ?? "")"), prefix: data.prefix ?? "", suffix: data.suffix ?? "", textColor: data.defaultTextColor , description: data.description ?? "下載中", descriptionColor: data.descriptionColor, font: data.descriptionFont, imageColor: .rgba(77, 77, 77, 1), viewModel: info[i])
         }
         
-        let emptyView = UIView()
-        emptyView.backgroundColor = .rgba(36, 40, 40, 1)
-        infoItemView.addArrangedSubview(emptyView)
+//        let emptyView = UIView()
+//        emptyView.backgroundColor = .rgba(36, 40, 40, 1)
+//        infoItemView.addArrangedSubview(emptyView)
         
         setBind()
         
@@ -262,15 +275,36 @@ class CardViewController: UIViewController {
         stackView.spacing = 0
         
         stackView.backgroundColor = .rgba(36, 40, 40, 1)
+        
+        //scrollbar
         setScrollIndicator()
+        
+        //list
         setTableView()
-        setInfomationView(viewModel: self.singleStationViewModel)
+        
+        let lineView = UIView()
+        stackView.addArrangedSubview(lineView)
+        lineView.translatesAutoresizingMaskIntoConstraints = false
+        lineView.backgroundColor = .rgba(23, 28, 27, 1)
+        lineView.heightAnchor.constraint(equalToConstant: 2).isActive = true
+
+        //emptyView
         let emptyView = UIView()
         emptyView.backgroundColor = .rgba(36, 40, 40, 1)
-        //emptyView.heightAnchor.constraint(equalToConstant: 10).isActive = true
         stackView.addArrangedSubview(emptyView)
+        emptyView.translatesAutoresizingMaskIntoConstraints = false
+        emptyView.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        
+        //infomation
+        setInfomationView(viewModel: self.singleStationViewModel)
+        
+        //emptyView
+        let emptyView2 = UIView()
+        emptyView2.backgroundColor = .rgba(36, 40, 40, 1)
+        stackView.addArrangedSubview(emptyView2)
 
-        //setNavigationToPlaceView()
+        //navigation
+        setNavigationToPlaceView()
 
     }
 }
@@ -314,11 +348,21 @@ extension CardViewController {
             tableViewHeight.constant  = 350
             gestureView.isHidden = true
             infoItemView.isHidden = true
+            navigationView.isHidden = true
         case .scrollable(.card):
-            stackViewHeight.constant = 200
+            debugPrint(".scrollable(.card)")
+            stackViewHeight.constant = 320
+            tableViewHeight.constant  = 105
+            gestureView.isHidden = false
+            infoItemView.isHidden = true
+            navigationView.isHidden = true
+        case .scrollable(.cardAndNavigation):
+            debugPrint(".scrollable(.cardAndNavigation)")
+            stackViewHeight.constant = 360
             tableViewHeight.constant  = 105
             gestureView.isHidden = false
             infoItemView.isHidden = false
+            navigationView.isHidden = false
         default:
             tableView.isHidden = false
             gestureView.isHidden = false

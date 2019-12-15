@@ -149,6 +149,15 @@ struct UBikeRentInfoViewModel {
             }
         }
     }
+    
+    var isFavorite: Bool?{
+        get{
+            return UserDefaults.standard.bool(forKey: self.sno )
+        }
+        set{
+            UserDefaults.standard.set(newValue, forKey: self.sno )
+        }
+    }
 
     init(model: StationDetail) {
         self.sareaen = model.sareaen

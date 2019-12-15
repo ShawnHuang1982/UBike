@@ -218,6 +218,10 @@ extension FlowController: UICollectionViewDataSource, UICollectionViewDelegate, 
 }
 
 extension FlowController: StationListPageViewControllerDelegate{
+    func reloadData() {
+        flowControlViewModel.fetchData()
+    }
+    
     func stationListPageViewControllerDidSelectStation(_ selectedStation: UBikeRentInfoViewModel) {
         
         let stationInMapPageViewController = StationInMapPageViewController()

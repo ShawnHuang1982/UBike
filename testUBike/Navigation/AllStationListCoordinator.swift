@@ -44,6 +44,10 @@ class AllStationListCoordinator: Coordinator {
 }
 
 extension AllStationListCoordinator: StationListPageViewControllerDelegate{
+    func reloadData() {
+        
+    }
+    
     func stationListPageViewControllerDidSelectStation(_ selectedStation: UBikeRentInfoViewModel) {
         let stationInMapCoordinate = StationInMapCoordinator(presenter: presenter, station: selectedStation, stationStorage: stationStorage)
         
