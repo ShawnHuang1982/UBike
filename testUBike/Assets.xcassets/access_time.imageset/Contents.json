@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "icon_timeUp@1x.png",
+      "filename" : "access_time@1x.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "icon_timeUp@2x.png",
+      "filename" : "access_time@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "icon_timeUp@3x.png",
+      "filename" : "access_time@3x.png",
       "scale" : "3x"
     }
   ],

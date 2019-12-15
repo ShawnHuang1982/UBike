@@ -19,6 +19,7 @@ class StationInMapPageViewController: UIViewController {
     var listViewModel: [UBikeRentInfoViewModel]?{
         didSet{
             bottomSheetVC.listViewModel = self.listViewModel
+            //guard listViewModel?.count ?? 0 > 0 else { return }
             self.listViewModel?.forEach({ [unowned self] (viewModel) in
                 makeAnnotaion(mapView: self.mapView, location: viewModel.staLocation?.coordinate, title: viewModel.sna, subTitle: viewModel.ar)
             })
@@ -90,7 +91,7 @@ class StationInMapPageViewController: UIViewController {
         
         //3
         NSLayoutConstraint.activate([
-            bottomSheetVC.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            bottomSheetVC.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
             bottomSheetVC.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
             bottomSheetVC.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
             bottomSheetVCheight
@@ -147,9 +148,8 @@ class StationInMapPageViewController: UIViewController {
 
 extension StationInMapPageViewController: CardViewControllerDelegate{
     
-    func panGesture(offsetY: CGFloat) {
-        let newHeight = bottomSheetVCheight.constant - offsetY
-        debugPrint(newHeight)
+    func panGesture(originHeight:CGFloat, offsetY: CGFloat) {
+        let newHeight = originHeight - offsetY
         UIView.animate(withDuration: 0.1) {
             if CardMode.scrollable(.card).contentHeight < newHeight && newHeight < CardMode.fixedHeight(.list).contentHeight{
                 self.bottomSheetVCheight.constant = newHeight

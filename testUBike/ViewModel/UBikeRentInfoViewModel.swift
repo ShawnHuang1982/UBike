@@ -78,6 +78,19 @@ struct UBikeRentInfoViewModel {
         }
     }
     
+    var font: UIFont{
+        get{
+            let font = UIFont(name: "PingFangTC-Regular", size: 14) ?? UIFont.systemFont(ofSize: 14)
+            return font
+        }
+    }
+    
+    var defaultFontColor: UIColor{
+        get{
+            return .rgba(174, 174, 174, 1)
+        }
+    }
+    
     enum RentStatus{
         case almostEmpty
         case full
