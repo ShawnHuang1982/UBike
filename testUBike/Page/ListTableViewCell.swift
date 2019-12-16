@@ -93,6 +93,18 @@ class ListTableViewCell: UITableViewCell {
         
     }
     
+    func initView(){
+        setContainerView()
+        setStationLabel()
+        setAddressLabel()
+        setSareaLabel()
+        setNumberLabel(displayNumberMode: self.displayNumberMode ?? .sbi)
+    }
+    
+    @objc func tapButton(){
+        
+    }
+    
     private func setLabel(_ label:UILabel?, text:String?, fontColor: UIColor? = nil){
         UIView.animate(withDuration: 1) {
             label?.text = text
@@ -104,14 +116,6 @@ class ListTableViewCell: UITableViewCell {
         UIView.animate(withDuration: 1) {
             label?.text = text
         }
-    }
-    
-    func initView(){
-        setContainerView()
-        setStationLabel()
-        setAddressLabel()
-        setSareaLabel()
-        setNumberLabel(displayNumberMode: self.displayNumberMode ?? .sbi)
     }
     
     private func setContainerView(){
@@ -145,6 +149,17 @@ class ListTableViewCell: UITableViewCell {
         let _ = NSLayoutConstraint.init(item: lineView, attribute: .leading, relatedBy: .equal, toItem: stationLabel, attribute: .trailing, multiplier: 1.0, constant: 10).isActive = true
         lineView.widthAnchor.constraint(equalToConstant: 2).isActive = true
         
+        //TODO: 我的最愛
+//        let button = UIButton()
+//        self.containerView.addSubview(button)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
+//        button.widthAnchor.constraint(equalToConstant: 24).isActive = true
+//        button.heightAnchor.constraint(equalToConstant: 24).isActive = true
+//        button.bottomAnchor.constraint(equalTo: self.containerView.bottomAnchor, constant: 5).isActive = true
+//        button.trailingAnchor.constraint(equalTo: self.lineView.leadingAnchor, constant: 20).isActive = true
+//        button.setImage(UIImage(named: "favorite"), for: .normal)
+        
         let supportTextLabel = UILabel()
         supportTextLabel.text = displayNumberMode == .sbi ? "可借" : "可還"
         supportTextLabel.textColor = UIColor.rgba(152, 152, 152, 1)
@@ -152,7 +167,7 @@ class ListTableViewCell: UITableViewCell {
         supportTextLabel.textAlignment = .right
         self.containerView.addSubview(supportTextLabel)
         supportTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        let _ = NSLayoutConstraint.init(item: supportTextLabel, attribute: .top, relatedBy: .equal, toItem: self.containerView, attribute: .top, multiplier: 1.0, constant: 10).isActive = true
+        let _ = NSLayoutConstraint.init(item: supportTextLabel, attribute: .top, relatedBy: .equal, toItem: self.containerView, attribute: .top, multiplier: 1.0, constant: 30).isActive = true
         
         let _ = NSLayoutConstraint.init(item: supportTextLabel, attribute: .leading, relatedBy: .equal, toItem: lineView, attribute: .trailing, multiplier: 1.0, constant: 10).isActive = true
         

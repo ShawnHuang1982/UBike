@@ -26,7 +26,7 @@ enum CardMode: Equatable {
             switch self {
             case .fixedHeight(.list): return 380
             case .scrollable(.card): return 200
-            case .scrollable(.cardAndNavigation): return 400
+            case .scrollable(.cardAndNavigation): return 380
             default: return 100
             }
         }
@@ -187,9 +187,9 @@ class CardViewController: UIViewController {
             setSingleItemInfoView(containerView: containerView, icon: UIImage(named: "\(data.iconName ?? "")"), prefix: data.prefix ?? "", suffix: data.suffix ?? "", textColor: data.defaultTextColor , description: data.description ?? "下載中", descriptionColor: data.descriptionColor, font: data.descriptionFont, imageColor: .rgba(77, 77, 77, 1), viewModel: info[i])
         }
         
-//        let emptyView = UIView()
-//        emptyView.backgroundColor = .rgba(36, 40, 40, 1)
-//        infoItemView.addArrangedSubview(emptyView)
+        let emptyView = UIView()
+        emptyView.backgroundColor = .rgba(36, 40, 40, 1)
+        infoItemView.addArrangedSubview(emptyView)
         
         setBind()
         
@@ -245,18 +245,10 @@ class CardViewController: UIViewController {
         suffixLabel.text = suffix
         suffixLabel.leadingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor, constant: 20).isActive = true
         suffixLabel.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        suffixLabel.topAnchor.constraint(equalTo: iconView.topAnchor, constant: 0).isActive = true
         suffixLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor, constant: 0).isActive = true
         suffixLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         suffixLabel.font = font
         suffixLabel.textColor = textColor
-        
-        var textChanged : (String) -> () = { _ in }
-        
-        func bind(callback:@escaping (String)->() ){
-            textChanged = callback
-        }
-
     }
     
     private func setStackView(){
@@ -265,9 +257,7 @@ class CardViewController: UIViewController {
         stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
         stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
         stackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -50).isActive = true
-        stackViewHeight = stackView.heightAnchor.constraint(greaterThanOrEqualToConstant: 350)
-        stackViewHeight.isActive = true
+        stackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
 
         stackView.axis = .vertical
         stackView.distribution = .fill
@@ -298,13 +288,13 @@ class CardViewController: UIViewController {
         //infomation
         setInfomationView(viewModel: self.singleStationViewModel)
         
+        //navigation
+        setNavigationToPlaceView()
+        
         //emptyView
         let emptyView2 = UIView()
         emptyView2.backgroundColor = .rgba(36, 40, 40, 1)
         stackView.addArrangedSubview(emptyView2)
-
-        //navigation
-        setNavigationToPlaceView()
 
     }
 }
@@ -344,14 +334,13 @@ extension CardViewController {
         self.displayType = mode
         switch mode {
         case .fixedHeight(.list):
-            stackViewHeight.constant = 380
+            debugPrint(".fixedHeight(.list)")
             tableViewHeight.constant  = 350
             gestureView.isHidden = true
             infoItemView.isHidden = true
             navigationView.isHidden = true
         case .scrollable(.card):
             debugPrint(".scrollable(.card)")
-            stackViewHeight.constant = 320
             tableViewHeight.constant  = 105
             gestureView.isHidden = false
             infoItemView.isHidden = true

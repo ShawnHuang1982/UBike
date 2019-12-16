@@ -26,7 +26,6 @@ class StationInMapPageViewController: UIViewController {
     var listViewModel: [UBikeRentInfoViewModel]?{
         didSet{
             bottomSheetVC.listViewModel = self.listViewModel
-            //guard listViewModel?.count ?? 0 > 0 else { return }
             self.listViewModel?.forEach({ [unowned self] (viewModel) in
                 makeAnnotaion(mapView: self.mapView, location: viewModel.staLocation?.coordinate, title: viewModel.sna, subTitle: viewModel.ar)
             })
@@ -49,7 +48,6 @@ class StationInMapPageViewController: UIViewController {
     
     private func makeSpecificAnnotation(){
         makeAnnotaion(mapView: self.mapView, location: singleStationViewModel.staLocation?.coordinate, title:  singleStationViewModel.sna , subTitle: singleStationViewModel.sbi )
-
     }
     
     private func moveToSelectLocation(){
@@ -73,7 +71,6 @@ class StationInMapPageViewController: UIViewController {
     
     private func initView(){
         self.view.backgroundColor = UIColor.rgba(23, 28, 27, 1)
-        
         setMapView()
         addBottomSheeView()
     }
@@ -88,7 +85,7 @@ class StationInMapPageViewController: UIViewController {
         bottomSheetVC.view.layer.cornerRadius = 10
         bottomSheetVC.view.clipsToBounds = true
         bottomSheetVC.selectMode(mode: mode)
-        bottomSheetVCheight = bottomSheetVC.view.heightAnchor.constraint(equalToConstant: 380)
+        bottomSheetVCheight = bottomSheetVC.view.heightAnchor.constraint(equalToConstant: CardMode.fixedHeight(.list).contentHeight)
         
         //3
         NSLayoutConstraint.activate([
@@ -159,8 +156,6 @@ extension StationInMapPageViewController: CardViewControllerDelegate{
             if offsetY < 0 {
                 self.bottomSheetVC.selectMode(mode: .scrollable(.cardAndNavigation))
                 self.bottomSheetVCheight.constant = CardMode.scrollable(.cardAndNavigation).contentHeight
-                
-                
             }else{
                 self.bottomSheetVC.selectMode(mode: .scrollable(.card))
                 self.bottomSheetVCheight.constant = CardMode.scrollable(.card).contentHeight

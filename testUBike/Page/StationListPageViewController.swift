@@ -15,7 +15,6 @@ protocol StationListPageViewControllerDelegate: class {
 
 class StationListPageViewController: UIViewController {
     
-    
     var viewModels: [UBikeRentInfoViewModel]?{
         didSet{
             DispatchQueue.main.async {
@@ -37,9 +36,7 @@ class StationListPageViewController: UIViewController {
         tableView.clipsToBounds = true
         return tableView
     }()
-    
-    weak var delegate: StationListPageViewControllerDelegate?
-    
+        
     lazy var segment: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["借車", "還車"])
         segment.tintColor = UIColor.white
@@ -60,6 +57,8 @@ class StationListPageViewController: UIViewController {
     }
     
     private var selectedIndexPath: IndexPath?
+    
+    weak var delegate: StationListPageViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -140,6 +139,28 @@ extension StationListPageViewController: UITableViewDataSource, UITableViewDeleg
         return UITableView.automaticDimension
     }
     
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+         // Get current state from data source
+        guard let viewModel = viewModels?[indexPath.row], let favorite = viewModel.isFavorite else {
+           return nil
+         }
+
+         let title = favorite ?
+           NSLocalizedString("Unfavorite", comment: "Unfavorite") :
+           NSLocalizedString("Favorite", comment: "Favorite")
+
+        let action = UIContextualAction(style: .normal, title: title,
+                                        handler: { (action, view, completionHandler) in
+            // Update data source when user taps action
+            UserDefaults.standard.set(!favorite, forKey: (viewModel.sno))
+                                            completionHandler(true)
+        })
+
+         action.image = UIImage(named: "favorite")
+         action.backgroundColor = favorite ? .red : .orange
+         let configuration = UISwipeActionsConfiguration(actions: [action])
+         return configuration
+    }
     
 }
 

@@ -43,7 +43,6 @@ class FlowController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -137,8 +136,9 @@ class FlowController: UIViewController {
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         //self.collectionView.alwaysBounceVertical = false
         self.collectionView.isPagingEnabled = true
+        self.collectionView.bounces = false
         self.collectionView.backgroundColor = .rgba(23, 28, 27, 1)
-
+        
         //TODO: myFavoriteVC init if UserDefault exist
         viewcontrollers = [listVC, mapVC]
         for vc in viewcontrollers{
@@ -180,8 +180,15 @@ extension FlowController: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-        cell.contentView.addSubview(self.views[indexPath.row])
-        cell.contentView.backgroundColor = .gray
+        let vcView = self.views[indexPath.row]
+        cell.contentView.addSubview(vcView)
+        vcView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            vcView.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
+            vcView.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: 0),
+            vcView.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor),
+            vcView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor),
+        ])
         return cell
     }
     
@@ -228,8 +235,6 @@ extension FlowController: StationListPageViewControllerDelegate{
         let stationInMapPageViewController = StationInMapPageViewController()
         self.presentVC(vc: stationInMapPageViewController)
         stationInMapPageViewController.singleStationViewModel = selectedStation
-        
-        
     }
     
     func presentVC(vc: UIViewController){

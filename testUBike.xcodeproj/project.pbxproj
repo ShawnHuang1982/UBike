@@ -144,6 +144,16 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		5C25760D23A6EE010089459B /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				5C28605723954685008A7EC1 /* Coordinator.swift */,
+				5C28605923955D40008A7EC1 /* AllStationListCoordinator.swift */,
+				5C28605D23956333008A7EC1 /* StationInMapCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
 		5C2E01BC238E8BC40063B3B1 = {
 			isa = PBXGroup;
 			children = (
@@ -237,9 +247,7 @@
 		5CC5120823987CB6002A6C68 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				5C28605723954685008A7EC1 /* Coordinator.swift */,
-				5C28605923955D40008A7EC1 /* AllStationListCoordinator.swift */,
-				5C28605D23956333008A7EC1 /* StationInMapCoordinator.swift */,
+				5C25760D23A6EE010089459B /* Coordinator */,
 				5CE5BD8C239775460066C05B /* FlowController.swift */,
 				5C63074623A0AF1A00D4A2C1 /* FlowController+Location.swift */,
 			);
