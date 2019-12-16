@@ -86,7 +86,7 @@ class FlowController: UIViewController {
     
     private func setTimer(isOn: Bool){
         if isOn{
-            timer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { [unowned flowControlViewModel] (timer) in
+            timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [unowned flowControlViewModel] (timer) in
                 flowControlViewModel.fetchData()                
                 debugPrint("fetch data")
             }
@@ -226,6 +226,22 @@ extension FlowController: UICollectionViewDataSource, UICollectionViewDelegate, 
 }
 
 extension FlowController: StationListPageViewControllerDelegate{
+    
+    func changedFavorite() {
+        let favoriteAry = flowControlViewModel.infos?.filter({ (viewMode) -> Bool in
+            return viewMode.isFavorite == true
+        })
+        let isFavoriteExist = favoriteAry?.count ?? 0 > 0
+        debugPrint(favoriteAry, isFavoriteExist)
+        let tabBarNames = isFavoriteExist ? ["列表", "地圖", "我的最愛"] : ["列表", "地圖"]
+        var tabBarViewModels: [TabBarViewModel] = []
+        for name in tabBarNames{
+            let viewModel = TabBarViewModel(model: TabBarModel(title: name))
+            tabBarViewModels.append(viewModel)
+        }
+        tabBarView.viewModels = tabBarViewModels
+    }
+    
     func reloadData() {
         flowControlViewModel.fetchData()
     }

@@ -14,7 +14,13 @@ class TabBarView: UIView {
     var indicatorView: UIView!
     var indicatorLeadingConstraint: NSLayoutConstraint!
     var indicatorWidthConstraint: NSLayoutConstraint!
-    var viewModels: [TabBarViewModel] = []
+    var viewModels: [TabBarViewModel] = []{
+        didSet{
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+    }
     
     var selectedIndex = 0
     

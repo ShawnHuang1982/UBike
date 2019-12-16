@@ -44,6 +44,10 @@ class AllStationListCoordinator: Coordinator {
 }
 
 extension AllStationListCoordinator: StationListPageViewControllerDelegate{
+    func changedFavorite() {
+        
+    }
+    
     func reloadData() {
         
     }

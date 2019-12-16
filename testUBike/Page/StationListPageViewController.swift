@@ -9,8 +9,12 @@
 import UIKit
 
 protocol StationListPageViewControllerDelegate: class {
+    ///選取站點
     func stationListPageViewControllerDidSelectStation(_ selectedStation: UBikeRentInfoViewModel)
+    /// when 下拉更新
     func reloadData()
+    /// 選取/取消選取我的最愛
+    func changedFavorite()
 }
 
 class StationListPageViewController: UIViewController {
@@ -109,7 +113,6 @@ class StationListPageViewController: UIViewController {
         tableView.backgroundColor = .rgba(23, 28, 27, 1)
         
         tableView.addSubview(self.refreshControl)
-
     }
 
 
@@ -121,9 +124,15 @@ extension StationListPageViewController: UITableViewDataSource, UITableViewDeleg
         let displayModel = segment.selectedSegmentIndex == 0 ? DisplayMode.sbi : DisplayMode.bemp
         let cell = ListTableViewCell(viewModel: viewModels?[indexPath.row], displayMode: displayModel, reuseIdentifier: "Cell")
         cell.selectionStyle = .none
+        cell.callback = { [weak self] in
+            let sno = self?.viewModels?[indexPath.row].sno ?? ""
+            let isFavorite = self?.viewModels?[indexPath.row].isFavorite ?? false
+            UserDefaults.standard.set(!isFavorite, forKey: sno)
+            self?.delegate?.changedFavorite()
+        }
         return cell
     }
-    
+            
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModels?.count ?? 0
     }
@@ -172,8 +181,6 @@ extension StationListPageViewController: UIViewControllerPreviewingDelegate{
     }
 
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        
-        
         if let indexPath = tableView.indexPathForRow(at: location), let viewModel = viewModels?[indexPath.row] {
             selectedIndexPath = indexPath
             let cardVC = CardViewController()

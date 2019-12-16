@@ -152,9 +152,12 @@ struct UBikeRentInfoViewModel {
     
     var isFavorite: Bool?{
         get{
-            return UserDefaults.standard.bool(forKey: self.sno ?? "")
+            let result = UserDefaults.standard.bool(forKey: self.sno ?? "")
+            debugPrint("👉",result)
+            return result
         }
         set{
+            debugPrint("set", self.sno, newValue)
             UserDefaults.standard.set(newValue, forKey: self.sno ?? "")
         }
     }

@@ -19,6 +19,8 @@ class ListTableViewCell: UITableViewCell {
 
     var containerView: UIView = UIView()
     
+    var callback: (()->Void)?
+    
     /// eg. 捷運市政府站(3號出口)
     var stationLabel: UILabel = {
         let label = UILabel()
@@ -69,6 +71,8 @@ class ListTableViewCell: UITableViewCell {
         }
     }
     
+    var favoriteButton = UIButton()
+    
     init(viewModel: UBikeRentInfoViewModel?, displayMode: DisplayMode, reuseIdentifier: String?){
         self.viewModel = viewModel
         self.displayNumberMode = displayMode
@@ -90,7 +94,12 @@ class ListTableViewCell: UITableViewCell {
         let color = displayNumberMode == .sbi ? viewModel?.sbiColor : viewModel?.bempColor
         setLabel(numberLabel, text: number, fontColor: color?.font)
         containerView.backgroundColor = color?.background
-        
+        setFavoriteButtonSytle(isFavorite: viewModel?.isFavorite ?? false)
+    }
+    
+    func setFavoriteButtonSytle(isFavorite: Bool){
+        favoriteButton.tintColor = isFavorite ? .systemPink : .gray
+        favoriteButton.isSelected = isFavorite
     }
     
     func initView(){
@@ -99,10 +108,43 @@ class ListTableViewCell: UITableViewCell {
         setAddressLabel()
         setSareaLabel()
         setNumberLabel(displayNumberMode: self.displayNumberMode ?? .sbi)
+        setFavortieButton()
+    }
+    
+    func setFavortieButton(){
+        //TODO: 我的最愛
+        
+        self.containerView.addSubview(favoriteButton)
+        favoriteButton.translatesAutoresizingMaskIntoConstraints = false
+        favoriteButton.widthAnchor.constraint(equalToConstant: 14).isActive = true
+        favoriteButton.heightAnchor.constraint(equalToConstant: 14).isActive = true
+        favoriteButton.topAnchor.constraint(equalTo: self.containerView.topAnchor, constant: 10).isActive = true
+        favoriteButton.trailingAnchor.constraint(equalTo: self.containerView.trailingAnchor, constant: -10).isActive = true
+        let unFavoriteImage = UIImage(named: "favorite")?.withRenderingMode(.alwaysTemplate)
+        favoriteButton.setImage(unFavoriteImage, for: .normal)
+        let favoriteImage = UIImage(named: "favorite_black")?.withRenderingMode(.alwaysTemplate)
+        favoriteButton.setImage(unFavoriteImage, for: .normal)
+        favoriteButton.setImage(favoriteImage, for: .selected)
+        favoriteButton.tintColor = .gray
+        
+        let realTouchButton = UIButton()
+        self.containerView.addSubview(realTouchButton)
+        realTouchButton.translatesAutoresizingMaskIntoConstraints = false
+        realTouchButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        realTouchButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        realTouchButton.centerXAnchor.constraint(equalTo: favoriteButton.centerXAnchor).isActive = true
+        realTouchButton.centerYAnchor.constraint(equalTo: favoriteButton.centerYAnchor).isActive = true
+        realTouchButton.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
+
     }
     
     @objc func tapButton(){
-        
+        if let action = callback{
+            action()
+            let isFavorite = viewModel?.isFavorite ?? false
+            favoriteButton.isSelected = isFavorite
+            favoriteButton.tintColor = isFavorite ? UIColor.systemPink : UIColor.gray
+        }
     }
     
     private func setLabel(_ label:UILabel?, text:String?, fontColor: UIColor? = nil){
@@ -148,17 +190,6 @@ class ListTableViewCell: UITableViewCell {
         let _ = NSLayoutConstraint.init(item: lineView, attribute: .bottom, relatedBy: .equal, toItem: self.containerView, attribute: .bottom, multiplier: 1.0, constant: 0).isActive = true
         let _ = NSLayoutConstraint.init(item: lineView, attribute: .leading, relatedBy: .equal, toItem: stationLabel, attribute: .trailing, multiplier: 1.0, constant: 10).isActive = true
         lineView.widthAnchor.constraint(equalToConstant: 2).isActive = true
-        
-        //TODO: 我的最愛
-//        let button = UIButton()
-//        self.containerView.addSubview(button)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
-//        button.widthAnchor.constraint(equalToConstant: 24).isActive = true
-//        button.heightAnchor.constraint(equalToConstant: 24).isActive = true
-//        button.bottomAnchor.constraint(equalTo: self.containerView.bottomAnchor, constant: 5).isActive = true
-//        button.trailingAnchor.constraint(equalTo: self.lineView.leadingAnchor, constant: 20).isActive = true
-//        button.setImage(UIImage(named: "favorite"), for: .normal)
         
         let supportTextLabel = UILabel()
         supportTextLabel.text = displayNumberMode == .sbi ? "可借" : "可還"
