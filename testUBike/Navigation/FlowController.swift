@@ -25,6 +25,8 @@ class FlowController: UIViewController {
     
     let locationManager = CLLocationManager()
     var userLocation: CLLocation?
+    
+    var myFavoriteViewModels: [UBikeRentInfoViewModel]?
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -48,6 +50,7 @@ class FlowController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         listVC.delegate = self
+        myFavoriteVC.delegate = self
         setTimer(isOn: true)
     }
     
@@ -80,6 +83,7 @@ class FlowController: UIViewController {
             let infos = self.userLocation != nil ? flowControlViewModel.sortedInfosByLocation : flowControlViewModel.sortedInfos
             self.listVC.viewModels = infos
             self.mapVC.listViewModel = infos
+            self.myFavoriteVC.viewModels = infos?.filter{$0.isFavorite == true}
             self.updateFavoriteUI()
             debugPrint("refreshViewClosure")
         }
@@ -137,11 +141,11 @@ class FlowController: UIViewController {
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         //self.collectionView.alwaysBounceVertical = false
         self.collectionView.isPagingEnabled = true
-        self.collectionView.bounces = false
+        self.collectionView.bounces = true
         self.collectionView.backgroundColor = .rgba(23, 28, 27, 1)
         
         //TODO: myFavoriteVC init if UserDefault exist
-        viewcontrollers = [listVC, mapVC]
+        viewcontrollers = [listVC, mapVC, myFavoriteVC]
         for vc in viewcontrollers{
             self.addChild(vc)
             vc.view.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height-80)
@@ -163,6 +167,9 @@ class FlowController: UIViewController {
         mapVC.userlocation = self.userLocation
         if let info = notification.userInfo as? [String: Int]{
             self.collectionView?.scrollToItem(at: IndexPath(row: info["index"] ?? 0, section: 0), at: .centeredHorizontally, animated: true)
+            if info["index"] == 2{
+                myFavoriteVC.viewModels = flowControlViewModel.infos?.filter{$0.isFavorite == true}
+            }
         }
     }
     
