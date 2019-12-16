@@ -80,6 +80,7 @@ class FlowController: UIViewController {
             let infos = self.userLocation != nil ? flowControlViewModel.sortedInfosByLocation : flowControlViewModel.sortedInfos
             self.listVC.viewModels = infos
             self.mapVC.listViewModel = infos
+            self.updateFavoriteUI()
             debugPrint("refreshViewClosure")
         }
     }
@@ -221,13 +222,7 @@ extension FlowController: UICollectionViewDataSource, UICollectionViewDelegate, 
         NotificationCenter.default.post(name: Notification.Name(rawValue: "scrollMenu"), object: nil, userInfo: ["length": scrollIndex])
     }
     
-    
-    
-}
-
-extension FlowController: StationListPageViewControllerDelegate{
-    
-    func changedFavorite() {
+    func updateFavoriteUI(){
         let favoriteAry = flowControlViewModel.infos?.filter({ (viewMode) -> Bool in
             return viewMode.isFavorite == true
         })
@@ -242,8 +237,17 @@ extension FlowController: StationListPageViewControllerDelegate{
         tabBarView.viewModels = tabBarViewModels
     }
     
+}
+
+extension FlowController: StationListPageViewControllerDelegate{
+    
+    func changedFavorite() {
+        updateFavoriteUI()
+    }
+    
     func reloadData() {
         flowControlViewModel.fetchData()
+        updateFavoriteUI()
     }
     
     func stationListPageViewControllerDidSelectStation(_ selectedStation: UBikeRentInfoViewModel) {
