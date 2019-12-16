@@ -76,7 +76,7 @@ class FlowController: UIViewController {
     }
     
     private func setViewModel(){
-        flowControlViewModel.fetchData()
+        //bind view <- viewModel
         flowControlViewModel.refreshViewClosure = {
             [unowned self, unowned flowControlViewModel] in
             flowControlViewModel.userLocation = self.userLocation
@@ -87,6 +87,9 @@ class FlowController: UIViewController {
             self.updateFavoriteUI()
             debugPrint("refreshViewClosure")
         }
+        
+        //fetch data
+        flowControlViewModel.fetchData()
     }
     
     private func setTimer(isOn: Bool){
@@ -159,18 +162,6 @@ class FlowController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.hideBar(notification:)), name: NSNotification.Name("hide"), object: nil)
         
         self.view.backgroundColor = UIColor.rgba(23, 28, 27, 1)
-
-        
-    }
-    
-    @objc func scrollViews(notification: Notification){
-        mapVC.userlocation = self.userLocation
-        if let info = notification.userInfo as? [String: Int]{
-            self.collectionView?.scrollToItem(at: IndexPath(row: info["index"] ?? 0, section: 0), at: .centeredHorizontally, animated: true)
-            if info["index"] == 2{
-                myFavoriteVC.viewModels = flowControlViewModel.infos?.filter{$0.isFavorite == true}
-            }
-        }
     }
     
     @objc func hideBar(notification: Notification){
@@ -183,7 +174,7 @@ class FlowController: UIViewController {
 
 extension FlowController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.viewcontrollers.count
+        return self.tabBarView.viewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -221,7 +212,24 @@ extension FlowController: UICollectionViewDataSource, UICollectionViewDelegate, 
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+}
+
+//MARK- : ui update behavior (include scroll)
+extension FlowController{
     
+    //MARK: 點擊上方tabbar
+    @objc func scrollViews(notification: Notification){
+        mapVC.userlocation = self.userLocation
+        if let info = notification.userInfo as? [String: Int]{
+            self.collectionView?.scrollToItem(at: IndexPath(row: info["index"] ?? 0, section: 0), at: .centeredHorizontally, animated: true)
+            //更新 我的最愛
+            if info["index"] == 2{
+                myFavoriteVC.viewModels = flowControlViewModel.infos?.filter{$0.isFavorite == true}
+            }
+        }
+    }
+    
+    //MARK: scrollview 移動
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let scrollIndex = scrollView.contentOffset.x / self.view.bounds.width
         debugPrint(scrollIndex)
@@ -230,20 +238,28 @@ extension FlowController: UICollectionViewDataSource, UICollectionViewDelegate, 
     }
     
     func updateFavoriteUI(){
-        let favoriteAry = flowControlViewModel.infos?.filter({ (viewMode) -> Bool in
-            return viewMode.isFavorite == true
-        })
-        let isFavoriteExist = favoriteAry?.count ?? 0 > 0
-        debugPrint(favoriteAry, isFavoriteExist)
-        let tabBarNames = isFavoriteExist ? ["列表", "地圖", "我的最愛"] : ["列表", "地圖"]
-        var tabBarViewModels: [TabBarViewModel] = []
-        for name in tabBarNames{
-            let viewModel = TabBarViewModel(model: TabBarModel(title: name))
-            tabBarViewModels.append(viewModel)
+        DispatchQueue.main.async {
+            let favoriteAry = self.flowControlViewModel.infos?.filter({ (viewMode) -> Bool in
+                return viewMode.isFavorite == true
+            })
+            let isFavoriteExist = favoriteAry?.count ?? 0 > 0
+            let tabBarNames = isFavoriteExist ? ["列表", "地圖", "我的最愛"] : ["列表", "地圖"]
+            var tabBarViewModels: [TabBarViewModel] = []
+            for name in tabBarNames{
+                let viewModel = TabBarViewModel(model: TabBarModel(title: name))
+                tabBarViewModels.append(viewModel)
+            }
+            self.tabBarView.viewModels = tabBarViewModels
+            self.collectionView.reloadData()
+            
+            if !isFavoriteExist{
+                self.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .left, animated: true)
+                self.tabBarView.moveToFirstIndicator()
+            }
+            self.myFavoriteVC.viewModels = favoriteAry
+            self.listVC.tableView.reloadData()
         }
-        tabBarView.viewModels = tabBarViewModels
     }
-    
 }
 
 extension FlowController: StationListPageViewControllerDelegate{
@@ -258,7 +274,6 @@ extension FlowController: StationListPageViewControllerDelegate{
     }
     
     func stationListPageViewControllerDidSelectStation(_ selectedStation: UBikeRentInfoViewModel) {
-
         let stationInMapPageViewController = StationInMapPageViewController()
         self.presentVC(vc: stationInMapPageViewController)
         stationInMapPageViewController.singleStationViewModel = selectedStation

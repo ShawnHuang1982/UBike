@@ -125,10 +125,14 @@ extension StationListPageViewController: UITableViewDataSource, UITableViewDeleg
         let cell = ListTableViewCell(viewModel: viewModels?[indexPath.row], displayMode: displayModel, reuseIdentifier: "Cell")
         cell.selectionStyle = .none
         cell.callback = { [weak self] in
+            //set favorite
             let sno = self?.viewModels?[indexPath.row].sno ?? ""
             let isFavorite = self?.viewModels?[indexPath.row].isFavorite ?? false
             UserDefaults.standard.set(!isFavorite, forKey: sno)
+            
+            //notify flowController
             self?.delegate?.changedFavorite()
+            
         }
         return cell
     }
@@ -188,7 +192,6 @@ extension StationListPageViewController: UIViewControllerPreviewingDelegate{
             cardVC.preferredContentSize = CGSize(width: 0.0, height: 450)
             return cardVC
         }
-          
         return nil
     }
 

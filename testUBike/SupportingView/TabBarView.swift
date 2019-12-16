@@ -17,12 +17,13 @@ class TabBarView: UIView {
     var viewModels: [TabBarViewModel] = []{
         didSet{
             DispatchQueue.main.async {
+                self.updateIndicator(row: self.selectedIndex)
                 self.collectionView.reloadData()
             }
         }
     }
     
-    var selectedIndex = 0
+    private var selectedIndex = 0
     
     //MARK: View LifeCycle
     override init(frame: CGRect) {
@@ -44,7 +45,6 @@ class TabBarView: UIView {
         DispatchQueue.main.async {
             self.setIndicatorView()
         }
-        
     }
     
     deinit {
@@ -55,6 +55,7 @@ class TabBarView: UIView {
 
 
 extension TabBarView{
+    
     //MARK: Methods
     func initView() {
         
@@ -89,23 +90,53 @@ extension TabBarView{
         indicatorView = UIView()
         indicatorView.backgroundColor = .white
         self.addSubview(indicatorView)
-        
+    }
+    
+    func moveToFirstIndicator(){
+        DispatchQueue.main.async {
+            self.selectedIndex = 0
+            self.updateIndicator(row: self.selectedIndex)
+        }
     }
     
     @objc func animateMenu(notification: Notification) {
         if let info = notification.userInfo {
             let userInfo = info as! [String: CGFloat]
             self.selectedIndex = Int(round(userInfo["length"]!))
-            //
-            let cell = collectionView.cellForItem(at: IndexPath(item: selectedIndex, section: 0))
-            let real = collectionView.convert(cell?.frame.origin ?? .zero, to: collectionView.superview)
-            self.indicatorLeadingConstraint.constant = (real.x) //userInfo["length"]! + (real.x)
+            //update indicator
+            updateIndicator(row: selectedIndex)
+            
+            //update tab bar name
+            if floor(userInfo["length"]!) == userInfo["length"]!{
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+
+        }
+    }
+    
+    private func updateIndicator(row: Int){
+        DispatchQueue.main.async {
+            let cell = self.collectionView.cellForItem(at: IndexPath(item: row, section: 0))
+            let real = self.collectionView.convert(cell?.frame.origin ?? .zero, to: self.collectionView.superview)
+            self.indicatorLeadingConstraint.constant = (real.x)
             self.indicatorWidthConstraint.constant = cell?.frame.width ?? 50.0
             self.layoutIfNeeded()
-            if floor(userInfo["length"]!) == userInfo["length"]!{
-                collectionView.reloadData()
-            }
         }
+    }
+    
+    private func setIndicatorView(){
+        indicatorView.translatesAutoresizingMaskIntoConstraints = false
+        let cell = collectionView.cellForItem(at: IndexPath(item: selectedIndex, section: 0))
+        indicatorLeadingConstraint = self.indicatorView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: cell?.frame.origin.x ?? .zero)
+        indicatorWidthConstraint = self.indicatorView.widthAnchor.constraint(equalToConstant: cell?.frame.width ?? 50.0)
+        indicatorLeadingConstraint.isActive = true
+        indicatorWidthConstraint.isActive = true
+        self.indicatorView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
+        self.indicatorView.heightAnchor.constraint(equalToConstant: 4).isActive = true
+        self.indicatorView.layer.cornerRadius = 2
+        self.indicatorView.clipsToBounds = true
     }
 }
 
@@ -126,19 +157,6 @@ extension TabBarView: UICollectionViewDelegateFlowLayout, UICollectionViewDataSo
         cell.viewModel = viewModel
         cell.titleLabel.textColor = isSelected ? viewModel.selectedColor : viewModel.color
         
-    }
-    
-    private func setIndicatorView(){
-        indicatorView.translatesAutoresizingMaskIntoConstraints = false
-        let cell = collectionView.cellForItem(at: IndexPath(item: selectedIndex, section: 0))
-        indicatorLeadingConstraint = self.indicatorView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: cell?.frame.origin.x ?? .zero)
-        indicatorWidthConstraint = self.indicatorView.widthAnchor.constraint(equalToConstant: cell?.frame.width ?? 50.0)
-        indicatorLeadingConstraint.isActive = true
-        indicatorWidthConstraint.isActive = true
-        self.indicatorView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5).isActive = true
-        self.indicatorView.heightAnchor.constraint(equalToConstant: 4).isActive = true
-        self.indicatorView.layer.cornerRadius = 2
-        self.indicatorView.clipsToBounds = true
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

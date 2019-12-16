@@ -47,11 +47,7 @@ struct UBikeRentInfoViewModel {
         }
     }
     
-    var usrLocation: CLLocation?{
-        didSet{
-            //debugPrint("👉userlocation", self.usrLocation)
-        }
-    }
+    var usrLocation: CLLocation?
     
     var distance: Int?{
         get{
@@ -152,11 +148,11 @@ struct UBikeRentInfoViewModel {
     
     var isFavorite: Bool?{
         get{
-            let result = UserDefaults.standard.bool(forKey: self.sno ?? "")
+            let result = UserDefaults.standard.bool(forKey: self.sno)
             return result
         }
         set{
-            UserDefaults.standard.set(newValue, forKey: self.sno ?? "")
+            UserDefaults.standard.set(newValue, forKey: self.sno)
         }
     }
 
