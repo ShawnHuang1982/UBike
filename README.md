@@ -1,3 +1,4 @@
 # UBike
 
-## UI Designed by A-i
+## Thanks to
+- UI designed by A-i
