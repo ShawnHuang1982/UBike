@@ -102,6 +102,53 @@ class CardViewController: UIViewController {
         setStackView()
     }
     
+    private func setStackView(){
+        self.view.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+        stackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.alignment = .fill
+        stackView.spacing = 0
+        
+        stackView.backgroundColor = .rgba(36, 40, 40, 1)
+        
+        //scrollbar
+        setScrollIndicator()
+        
+        //list
+        setTableView()
+        
+        let lineView = UIView()
+        stackView.addArrangedSubview(lineView)
+        lineView.translatesAutoresizingMaskIntoConstraints = false
+        lineView.backgroundColor = .rgba(23, 28, 27, 1)
+        lineView.heightAnchor.constraint(equalToConstant: 2).isActive = true
+
+        //emptyView
+        let emptyView = UIView()
+        emptyView.backgroundColor = .rgba(36, 40, 40, 1)
+        stackView.addArrangedSubview(emptyView)
+        emptyView.translatesAutoresizingMaskIntoConstraints = false
+        emptyView.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        
+        //infomation
+        setInfomationView(viewModel: self.singleStationViewModel)
+        
+        //navigation
+        setNavigationToPlaceView()
+        
+        //emptyView
+        let emptyView2 = UIView()
+        emptyView2.backgroundColor = .rgba(36, 40, 40, 1)
+        stackView.addArrangedSubview(emptyView2)
+
+    }
+    
     private func setScrollIndicator(){
         self.stackView.addArrangedSubview(self.gestureView)
         gestureView.backgroundColor = .rgba(36, 40, 40, 1)
@@ -251,52 +298,6 @@ class CardViewController: UIViewController {
         suffixLabel.textColor = textColor
     }
     
-    private func setStackView(){
-        self.view.addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-        stackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-
-        stackView.axis = .vertical
-        stackView.distribution = .fill
-        stackView.alignment = .fill
-        stackView.spacing = 0
-        
-        stackView.backgroundColor = .rgba(36, 40, 40, 1)
-        
-        //scrollbar
-        setScrollIndicator()
-        
-        //list
-        setTableView()
-        
-        let lineView = UIView()
-        stackView.addArrangedSubview(lineView)
-        lineView.translatesAutoresizingMaskIntoConstraints = false
-        lineView.backgroundColor = .rgba(23, 28, 27, 1)
-        lineView.heightAnchor.constraint(equalToConstant: 2).isActive = true
-
-        //emptyView
-        let emptyView = UIView()
-        emptyView.backgroundColor = .rgba(36, 40, 40, 1)
-        stackView.addArrangedSubview(emptyView)
-        emptyView.translatesAutoresizingMaskIntoConstraints = false
-        emptyView.heightAnchor.constraint(equalToConstant: 10).isActive = true
-        
-        //infomation
-        setInfomationView(viewModel: self.singleStationViewModel)
-        
-        //navigation
-        setNavigationToPlaceView()
-        
-        //emptyView
-        let emptyView2 = UIView()
-        emptyView2.backgroundColor = .rgba(36, 40, 40, 1)
-        stackView.addArrangedSubview(emptyView2)
-
-    }
 }
 
 extension CardViewController: UITableViewDataSource, UITableViewDelegate{
@@ -368,9 +369,4 @@ extension CardViewController {
         bind3 = info?[2].reloadView!
     }
 
-    
-
-    
-    
-    
 }

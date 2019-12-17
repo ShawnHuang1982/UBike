@@ -25,7 +25,7 @@ class StationInMapCoordinator: Coordinator {
     
     func start() {
         let stationInMapPageViewController = StationInMapPageViewController()
-        stationInMapPageViewController.title = self.station.sareaen
+        stationInMapPageViewController.title = self.station.sarea
         
         presenter.pushViewController(stationInMapPageViewController, animated: true)
         self.stationInMapPageViewController = stationInMapPageViewController

@@ -36,6 +36,7 @@
 		5C775FAE2398C62F00A2CF2A /* TabBarCellCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C775FAC2398C62F00A2CF2A /* TabBarCellCollectionViewCell.xib */; };
 		5C83A8E3239D5DAB0058B862 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C83A8E2239D5DAB0058B862 /* CardViewController.swift */; };
 		5C83A8E5239D61FA0058B862 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C83A8E4239D61FA0058B862 /* DataModel.swift */; };
+		5CB4182B23A9127E00043DE6 /* InfomationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB4182A23A9127E00043DE6 /* InfomationViewController.swift */; };
 		5CC5120723987CAA002A6C68 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5120623987CAA002A6C68 /* TabBarView.swift */; };
 		5CC5120B23987FB0002A6C68 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC5120A23987FB0002A6C68 /* Extensions.swift */; };
 		5CE5BD8D239775460066C05B /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE5BD8C239775460066C05B /* FlowController.swift */; };
@@ -93,6 +94,7 @@
 		5C775FAC2398C62F00A2CF2A /* TabBarCellCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarCellCollectionViewCell.xib; sourceTree = "<group>"; };
 		5C83A8E2239D5DAB0058B862 /* CardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
 		5C83A8E4239D61FA0058B862 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		5CB4182A23A9127E00043DE6 /* InfomationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfomationViewController.swift; sourceTree = "<group>"; };
 		5CC5120623987CAA002A6C68 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		5CC5120A23987FB0002A6C68 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5CE5BD8C239775460066C05B /* FlowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				5C28605B239561C1008A7EC1 /* StationListPageViewController.swift */,
 				5C4BC76E23924C3B00A562DD /* StationInMapPageViewController.swift */,
 				5C4BC77123924C7B00A562DD /* MyFavoriteStationViewController.swift */,
+				5CB4182A23A9127E00043DE6 /* InfomationViewController.swift */,
 				5C83A8E2239D5DAB0058B862 /* CardViewController.swift */,
 				5C63074423A0AE2C00D4A2C1 /* ListInMapTableViewCell.swift */,
 				5C196CE0239AA01D005352BE /* ListTableViewCell.swift */,
@@ -422,6 +425,7 @@
 				5C4BC77223924C7B00A562DD /* MyFavoriteStationViewController.swift in Sources */,
 				5C196CEC239B36C5005352BE /* UBikeRentInfoViewModel.swift in Sources */,
 				5C28605823954685008A7EC1 /* Coordinator.swift in Sources */,
+				5CB4182B23A9127E00043DE6 /* InfomationViewController.swift in Sources */,
 				5CE5BD8D239775460066C05B /* FlowController.swift in Sources */,
 				5CC5120B23987FB0002A6C68 /* Extensions.swift in Sources */,
 				5C196CE8239B3644005352BE /* ApiModel.swift in Sources */,

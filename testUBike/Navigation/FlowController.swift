@@ -122,7 +122,7 @@ class FlowController: UIViewController {
         self.tabBarView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 20).isActive = true
         self.tabBarView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         self.tabBarView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        self.tabBarView.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        self.tabBarView.heightAnchor.constraint(equalToConstant: 70).isActive = true
         
         //layout
         let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -275,6 +275,7 @@ extension FlowController: StationListPageViewControllerDelegate{
     
     func stationListPageViewControllerDidSelectStation(_ selectedStation: UBikeRentInfoViewModel) {
         let stationInMapPageViewController = StationInMapPageViewController()
+        stationInMapPageViewController.isNeedIndicatorView = true
         self.presentVC(vc: stationInMapPageViewController)
         stationInMapPageViewController.singleStationViewModel = selectedStation
     }

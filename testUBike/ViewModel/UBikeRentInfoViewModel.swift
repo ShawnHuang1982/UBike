@@ -13,6 +13,8 @@ struct UBikeRentInfoViewModel {
     
     ///站點代號
     var sno: String //"0001"
+    ///場站區域(中文)
+    var sarea: String
     ///場站區域(英文)
     var sareaen: String
     ///場站名稱(中文)
@@ -169,5 +171,6 @@ struct UBikeRentInfoViewModel {
         self.sno = model.sno
         self.lat = model.lat
         self.lng = model.lng
+        self.sarea = model.sarea
     }
 }

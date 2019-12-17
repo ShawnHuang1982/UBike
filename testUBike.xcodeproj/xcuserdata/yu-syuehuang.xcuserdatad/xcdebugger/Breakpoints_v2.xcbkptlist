@@ -86,8 +86,8 @@
             filePath = "testUBike/Page/CardViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "360"
-            endingLineNumber = "360"
+            startingLineNumber = "361"
+            endingLineNumber = "361"
             landmarkName = "selectMode(mode:)"
             landmarkType = "7">
          </BreakpointContent>

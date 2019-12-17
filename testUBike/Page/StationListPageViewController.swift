@@ -187,10 +187,10 @@ extension StationListPageViewController: UIViewControllerPreviewingDelegate{
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         if let indexPath = tableView.indexPathForRow(at: location), let viewModel = viewModels?[indexPath.row] {
             selectedIndexPath = indexPath
-            let cardVC = CardViewController()
-            cardVC.singleStationViewModel = viewModel
-            cardVC.preferredContentSize = CGSize(width: 0.0, height: 450)
-            return cardVC
+            let infomationVC = InfomationViewController()
+            infomationVC.singleStationViewModel = viewModel
+            infomationVC.preferredContentSize = CGSize(width: 0.0, height: 450)
+            return infomationVC
         }
         return nil
     }

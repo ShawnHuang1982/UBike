@@ -36,6 +36,10 @@ class StationInMapPageViewController: UIViewController {
     private var bottomSheetVCheight: NSLayoutConstraint!
     private var mapViewBottom: NSLayoutConstraint!
     
+    var isNeedIndicatorView: Bool = false
+    
+    lazy var indicator = UIView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
@@ -73,6 +77,19 @@ class StationInMapPageViewController: UIViewController {
         self.view.backgroundColor = UIColor.rgba(23, 28, 27, 1)
         setMapView()
         addBottomSheeView()
+        if isNeedIndicatorView{
+            setScrollIndicator()
+        }
+    }
+    
+    private func setScrollIndicator(){
+        self.view.addSubview(indicator)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        indicator.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 10).isActive = true
+        indicator.heightAnchor.constraint(equalToConstant: 4).isActive = true
+        indicator.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        indicator.backgroundColor = .rgba(77, 77, 77, 1)
     }
     
     private func addBottomSheeView(mode: CardMode = .fixedHeight(.list)){
