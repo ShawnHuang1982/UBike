@@ -78,7 +78,7 @@ class ListInMapTableViewCell: UITableViewCell {
         self.backgroundColor = .clear
         setLabel(stationLabel, text: viewModel?.sna)
         setLabel(addressLabel, text: viewModel?.ar)
-        setLabel(sareaLabel, text: viewModel?.sareaen)
+        setLabel(sareaLabel, text: viewModel?.sarea)
         setLabel(numberLabel, text: "\(viewModel?.distance ?? 0)", fontColor: viewModel?.distanceColor)
         containerView.backgroundColor = .rgba(36, 40, 40, 1)
     }

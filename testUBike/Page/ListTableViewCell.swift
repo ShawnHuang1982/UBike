@@ -89,7 +89,7 @@ class ListTableViewCell: UITableViewCell {
         self.backgroundColor = .clear
         setLabel(stationLabel, text: viewModel?.sna)
         setLabel(addressLabel, text: viewModel?.ar)
-        setLabel(sareaLabel, text: viewModel?.sareaen)
+        setLabel(sareaLabel, text: viewModel?.sarea)
         let number = displayNumberMode == .sbi ? viewModel?.sbi : viewModel?.bemp
         let color = displayNumberMode == .sbi ? viewModel?.sbiColor : viewModel?.bempColor
         setLabel(numberLabel, text: number, fontColor: color?.font)

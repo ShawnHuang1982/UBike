@@ -185,7 +185,8 @@ extension StationListPageViewController: UIViewControllerPreviewingDelegate{
     }
 
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        if let indexPath = tableView.indexPathForRow(at: location), let viewModel = viewModels?[indexPath.row] {
+        let offsetView = self.view.convert(location, to: tableView)
+        if let indexPath = tableView.indexPathForRow(at: offsetView), let viewModel = viewModels?[indexPath.row] {
             selectedIndexPath = indexPath
             let infomationVC = InfomationViewController()
             infomationVC.singleStationViewModel = viewModel
