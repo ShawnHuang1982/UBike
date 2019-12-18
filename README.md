@@ -8,4 +8,4 @@
 FlowController: coordinator
 
 ## Thanks to
-- UI designed by (A-i) (https://www.behance.net/gallery/42051993/-PREMIUN-GEARS)
+- UI designed by [A-i](https://www.behance.net/A-i_Huang)
