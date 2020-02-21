@@ -8,8 +8,22 @@
 
 import UIKit
 import CoreLocation
+import DifferenceKit
 
-struct UBikeRentInfoViewModel {
+extension String : Differentiable {}
+
+struct UBikeRentInfoViewModel: Differentiable {
+    
+    var differenceIdentifier: String {
+        return sno
+    }
+    
+    func isContentEqual(to source: UBikeRentInfoViewModel) -> Bool {
+        return sno == source.sno && sbi == source.sbi && bemp == source.bemp
+    }
+    
+    typealias DifferenceIdentifier = String
+    
     
     ///站點代號
     var sno: String //"0001"
@@ -42,7 +56,7 @@ struct UBikeRentInfoViewModel {
         get{
             
             guard let lat = Double(self.lat.trimmingCharacters(in: .whitespaces)), let lng = Double(self.lng.trimmingCharacters(in: .whitespaces)) else {
-                debugPrint("no staLocation", self.lat, self.lng)
+                //debugPrint("no staLocation", self.lat, self.lng)
                 return nil
             }
             return CLLocation(latitude: lat, longitude: lng)
@@ -54,7 +68,7 @@ struct UBikeRentInfoViewModel {
     var distance: Int?{
         get{
             guard let usrLoc = usrLocation, let staLoc = self.staLocation else {
-                debugPrint("no usr location")
+                //debugPrint("no usr location")
                 return nil
             }
             //debugPrint(usrLoc)

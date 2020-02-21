@@ -25,7 +25,7 @@ class FlowControlViewModel {
     
     var sortedInfos: [UBikeRentInfoViewModel]?{
         get{
-            debugPrint("👉2 sortedInfosByDefault")
+            //debugPrint("👉2 sortedInfosByDefault")
             return self.infos?.filter{$0.act == "1"}.sorted(by: { (lhs, rhs) -> Bool in
                 return lhs.sno > rhs.sno
             })
@@ -35,9 +35,9 @@ class FlowControlViewModel {
     
     var sortedInfosByLocation: [UBikeRentInfoViewModel]?{
         get{
-            debugPrint("👉1 sortedInfosByLocation")
+            //debugPrint("👉1 sortedInfosByLocation")
             guard let usrLocation = self.userLocation else {
-                debugPrint("no user location")
+                //debugPrint("no user location")
                 return nil
             }
             let newViewModels = self.infos?.compactMap({ (viewModel) -> UBikeRentInfoViewModel in

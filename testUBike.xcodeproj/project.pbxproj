@@ -13,7 +13,6 @@
 		5C196CEF239B3707005352BE /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C196CEE239B3707005352BE /* ListViewModel.swift */; };
 		5C196CF1239B37DE005352BE /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C196CF0239B37DE005352BE /* TabBarViewModel.swift */; };
 		5C196CF3239B3915005352BE /* FlowControlViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C196CF2239B3915005352BE /* FlowControlViewModel.swift */; };
-		5C196CF9239B9E95005352BE /* Differ in Frameworks */ = {isa = PBXBuildFile; productRef = 5C196CF8239B9E95005352BE /* Differ */; };
 		5C28605823954685008A7EC1 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C28605723954685008A7EC1 /* Coordinator.swift */; };
 		5C28605A23955D40008A7EC1 /* AllStationListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C28605923955D40008A7EC1 /* AllStationListCoordinator.swift */; };
 		5C28605C239561C1008A7EC1 /* StationListPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C28605B239561C1008A7EC1 /* StationListPageViewController.swift */; };
@@ -30,6 +29,7 @@
 		5C2E01FC238E94E20063B3B1 /* bike.json in Resources */ = {isa = PBXBuildFile; fileRef = 5C2E01FB238E94E20063B3B1 /* bike.json */; };
 		5C4BC76F23924C3B00A562DD /* StationInMapPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BC76E23924C3B00A562DD /* StationInMapPageViewController.swift */; };
 		5C4BC77223924C7B00A562DD /* MyFavoriteStationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4BC77123924C7B00A562DD /* MyFavoriteStationViewController.swift */; };
+		5C50329123FFE60800067857 /* DifferenceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5C50329023FFE60800067857 /* DifferenceKit */; };
 		5C63074523A0AE2C00D4A2C1 /* ListInMapTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63074423A0AE2C00D4A2C1 /* ListInMapTableViewCell.swift */; };
 		5C63074723A0AF1A00D4A2C1 /* FlowController+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C63074623A0AF1A00D4A2C1 /* FlowController+Location.swift */; };
 		5C775FAD2398C62F00A2CF2A /* TabBarCellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C775FAB2398C62F00A2CF2A /* TabBarCellCollectionViewCell.swift */; };
@@ -105,7 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C196CF9239B9E95005352BE /* Differ in Frameworks */,
+				5C50329123FFE60800067857 /* DifferenceKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,7 +283,7 @@
 			);
 			name = testUBike;
 			packageProductDependencies = (
-				5C196CF8239B9E95005352BE /* Differ */,
+				5C50329023FFE60800067857 /* DifferenceKit */,
 			);
 			productName = testUBike;
 			productReference = 5C2E01C5238E8BC40063B3B1 /* testUBike.app */;
@@ -358,7 +358,7 @@
 			);
 			mainGroup = 5C2E01BC238E8BC40063B3B1;
 			packageReferences = (
-				5C196CF7239B9E94005352BE /* XCRemoteSwiftPackageReference "Differ" */,
+				5C50328F23FFE60700067857 /* XCRemoteSwiftPackageReference "DifferenceKit" */,
 			);
 			productRefGroup = 5C2E01C6238E8BC40063B3B1 /* Products */;
 			projectDirPath = "";
@@ -760,21 +760,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		5C196CF7239B9E94005352BE /* XCRemoteSwiftPackageReference "Differ" */ = {
+		5C50328F23FFE60700067857 /* XCRemoteSwiftPackageReference "DifferenceKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/tonyarnold/Differ";
+			repositoryURL = "https://github.com/ra1028/DifferenceKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.3;
+				minimumVersion = 1.1.5;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		5C196CF8239B9E95005352BE /* Differ */ = {
+		5C50329023FFE60800067857 /* DifferenceKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 5C196CF7239B9E94005352BE /* XCRemoteSwiftPackageReference "Differ" */;
-			productName = Differ;
+			package = 5C50328F23FFE60700067857 /* XCRemoteSwiftPackageReference "DifferenceKit" */;
+			productName = DifferenceKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

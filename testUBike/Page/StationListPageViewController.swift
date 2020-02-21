@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DifferenceKit
 
 protocol StationListPageViewControllerDelegate: class {
     ///選取站點
@@ -21,10 +22,16 @@ class StationListPageViewController: UIViewController {
     
     var viewModels: [UBikeRentInfoViewModel]?{
         didSet{
-            DispatchQueue.main.async {
-                self.refreshControl.endRefreshing()
-                self.tableView.reloadData()
+            if let oldValue = oldValue, let newValue = self.viewModels{
+                let changset = StagedChangeset(source: oldValue, target: newValue)
+                DispatchQueue.main.async {
+                    self.refreshControl.endRefreshing()
+                    self.tableView.reload(using: changset, deleteSectionsAnimation: UITableView.RowAnimation.left, insertSectionsAnimation: UITableView.RowAnimation.left, reloadSectionsAnimation: UITableView.RowAnimation.left, deleteRowsAnimation: UITableView.RowAnimation.left, insertRowsAnimation: UITableView.RowAnimation.left, reloadRowsAnimation: .right) { (data) in
+                    }
+                }
             }
+            
+            
         }
     }
     
